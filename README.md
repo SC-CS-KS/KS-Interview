@@ -1,5 +1,7 @@
 # inter-view
-for interview
+```md
+for interview.
+```
 
 ## [Interview key point](interview/README.md)
 
