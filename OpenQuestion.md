@@ -1,4 +1,4 @@
-# Open Question
+# Open Questions
 
 ```md
 项目中你遇到的难点是什么？怎么解决的？
