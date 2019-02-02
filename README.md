@@ -1,13 +1,19 @@
 # sc.interview
 > interview collection
-## Tech
+
 * [Interview Theory](theory/README.md)
 
+## [Inteviewer](inteviewer/README.md)
+
+## Inteviewee
+
+## Technique
 * [Java](java/README.md)
 * [DataStructure & Algorithm](ds-algo/README.md)
-* 设计模式
+* [Design Pattern](design-pattern/README.md)
+* [OOP](paradigms/OOP.md)
 
-* Web
+* [Web](web/README.md)
 
 * Distributed System
 * Microservice
@@ -19,9 +25,9 @@
 
 * HA
 * HP
-* 安全
+* Security
 
-* Network
+* [Network](network/README.md)
 
 ### 工程
 * 需求分析
@@ -30,4 +36,10 @@
 
 ## 软实力
 
+## [Open Questions](OpenQuestion.md)
+
+
 ## Parctice
+
+## Resources
+* [可能是一份最适合你的后端面试指南](https://juejin.im/post/5ba591386fb9a05cd31eb85f)
