@@ -1,11 +1,11 @@
 # Drill Code
 > Code training
 
-## Topics
-
+* [Algorithms](algorithm/README.md)
 
 ## [LeetCode](leetcode/README.md)
 
 
-## Reference
+## Resources
+
 
