@@ -1,22 +1,26 @@
 # sc.interview
 > Interview collections
 
-* [Interview Theory](theory/README.md)
-
 ## [Inteviewer](inteviewer/README.md)
 
 ## [Inteviewee](Inteviewee/README.md)
 
-## [Coding](coding/README.md)
-* [Algorithm](coding/algorithm/README.md)
+* Resume
+* Soft Power
 
-## [Knowledge Point](tech/README.md)
+## Inteview
 
-## [Open Questions](OpenQuestion.md)
+* [Interview Theory](theory/README.md)
 
-## [Interview Experience](practice/README.md)
+### [Coding](interview/coding/README.md)
 
-## Soft Power
+* [Algorithm](interview/coding/algorithm/README.md)
+
+### [Knowledge Point](interview/tech/README.md)
+
+### [Open Questions](interview/OpenQuestion.md)
+
+### [Interview Experience](interview/practice/README.md)
 
 ## Resources
-* [可能是一份最适合你的后端面试指南](https://juejin.im/post/5ba591386fb9a05cd31eb85f)
+* [一份最适合你的后端面试指南](https://juejin.im/post/5ba591386fb9a05cd31eb85f)
