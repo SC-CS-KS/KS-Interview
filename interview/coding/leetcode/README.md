@@ -11,5 +11,5 @@
 * [169. Majority Element - Easy](https://leetcode.com/problems/majority-element/)
 
 ## Reference
-* yzchenguang@126.com/Yz******
+* 126.com/Y*******
 * [LeetCodeAnimation - 用动画的形式呈现解LeetCode题目的思路](https://github.com/MisterBooo/LeetCodeAnimation)
