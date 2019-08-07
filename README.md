@@ -24,3 +24,4 @@
 
 ## Resources
 * [一份最适合你的后端面试指南](https://juejin.im/post/5ba591386fb9a05cd31eb85f)
+* [CS-Notes - 技术面试必备](https://github.com/CyC2018/CS-Notes)
