@@ -1,10 +1,6 @@
 # sc.interview
 > Interview collections
 
-## [Inteviewer](inteviewer/README.md)
-
-## [Inteviewee](Inteviewee/README.md)
-
 * Resume
 * Soft Power
 
