@@ -28,7 +28,8 @@
 
 #### [编码能力](RD/coding/README.md)
 * [算法](https://github.com/SunnnyChan/half-hour-of-ALGS)
-* * LeetCode
+
+#### [LeetCode](LeetCode/README.md)
 
 #### 工程
 * 需求分析
