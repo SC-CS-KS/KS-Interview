@@ -42,6 +42,8 @@
 ### [开放性问题](Q&A/OpenQuestion.md)
 
 ## 软实力
+* [Tech Interview Handbook](https://github.com/yangshun/tech-interview-handbook)
+
 ### 沟通
 * [reverse-interview (技术面试最后反问面试官的话)](https://github.com/yifeikong/reverse-interview-zh)
 
