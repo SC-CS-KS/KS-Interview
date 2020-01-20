@@ -1,55 +1,31 @@
-# sc.interview
-> Interview collections
+# 面试
 
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-## 应聘
-### 简历
-### [如何面试（应聘）？](theory/README.md)
+Tables of Content
+=================
 
-## 招聘
-### [如何面试（招聘）？](theory/README.md)
-
-## 技术
-### RD
-#### 基础技术
-* [Java](RD/tech/java/README.md)
-* [Design Pattern](RD/tech/design-pattern/README.md)
-* [OOP](RD/tech/paradigms/OOP.md)
-
-* [Web](RD/tech/web/README.md)
-
-* MySQL
-* Redis
-* Cache
-* MQ
-
-* HA
-* HP
-
-#### [编码能力](RD/coding/README.md)
-* [算法](https://github.com/SunnnyChan/half-hour-of-ALGS)
-
-#### [LeetCode](LeetCode/README.md)
-
-#### 工程
-* 需求分析
-* 设计能力
-* 业务工程
-
-### [QA](QA/README.md)
-
-## 面试题
-### [开放性问题](Q&A/OpenQuestion.md)
-
-## 软实力
-* [Tech Interview Handbook](https://github.com/yangshun/tech-interview-handbook)
-
-### 沟通
-* [reverse-interview (技术面试最后反问面试官的话)](https://github.com/yifeikong/reverse-interview-zh)
-
-## Resources
-* [互联网 Java 工程师进阶知识](https://github.com/doocs/advanced-java)
-
-* [一份最适合你的后端面试指南](https://juejin.im/post/5ba591386fb9a05cd31eb85f)
-* [CS-Notes - 技术面试必备](https://github.com/CyC2018/CS-Notes)
-* [fullstack-tutorial - 后台技术栈/架构师之路/全栈开发社区](https://github.com/frank-lam/fullstack-tutorial)
+   * [<a href="Resume/README.md">简历</a>](#简历)
+   * [应聘](#应聘)
+      * [<a href="Apply/InspectionPoint.md">面试考察点</a>](#面试考察点)
+      * [<a href="Apply/_practice/README.md">面试经验</a>](#面试经验)
+   * [招聘](#招聘)
+      * [<a href="Recruit/README.md">如何面试（招聘）？</a>](#如何面试招聘)
+      * [面试理论](#面试理论)
+         * [<a href="Recruit/IceTheory.md">“冰山”理论</a>](#冰山理论)
+         * [<a href="Recruit/TBEITheory.md">目标-行为事件访谈法</a>](#目标-行为事件访谈法)
+      * [<a href="Recruit/InspectionPoint.md">面试考察点</a>](#面试考察点-1)
+      * [<a href="Recruit/Skills.md">面试技巧</a>](#面试技巧)
+   * [RD](#rd)
+      * [基础技术](#基础技术)
+      * [<a href="RD/coding/README.md">编码能力</a>](#编码能力)
+         * [<a href="LeetCode/README.md">LeetCode</a>](#leetcode)
+      * [工程](#工程)
+   * [QA](#qa)
+      * [<a href="https://github.com/SC-CS-KS/KS-QA/blob/master/_pic/QA.png">QA 能力模型</a>](#qa-能力模型)
+      * [<a href="QA/InterviewQuestions.md">QA 面试题</a>](#qa-面试题)
+   * [面试题](#面试题)
+      * [<a href="Q&amp;A/OpenQuestion.md">开放性问题</a>](#开放性问题)
+   * [软实力](#软实力)
+      * [沟通](#沟通)
+   * [Resources](#resources)
