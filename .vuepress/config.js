@@ -9,6 +9,15 @@ module.exports = {
     ],
     sidebar: [
       {
+        title: '计算机基础',   // 必要的
+        path: '/CSBasics/',      // 可选的
+        collapsable: true, // 可选的, 默认值是 true,
+        sidebarDepth: 1,    // 可选的, 默认值是 1
+        children: [
+          '/CSBasics/network/',
+        ]
+      },
+      {
         title: 'Java',   // 必要的
         path: '/Java/',      // 可选的
         collapsable: true, // 可选的, 默认值是 true,
@@ -26,20 +35,34 @@ module.exports = {
       {
         title: '算法',   // 必要的
         path: '/Algos/',      // 可选的
-        collapsable: false, // 可选的, 默认值是 true,
+        collapsable: true, // 可选的, 默认值是 true,
         sidebarDepth: 1,    // 可选的, 默认值是 1
+        children: [
+          '/Algos/LeetCode/',
+        ]
       },
       {
         title: '架构',   // 必要的
         path: '/Arch/',      // 可选的
         collapsable: true, // 可选的, 默认值是 true,
         sidebarDepth: 1,    // 可选的, 默认值是 1
+        children: [
+          '/Arch/Distributed/',
+          '/Arch/SOA/',
+          '/Arch/MicroService/',
+        ]
       },
       {
         title: '组件',   // 必要的
         path: '/Infras/',      // 可选的
-        collapsable: false, // 可选的, 默认值是 true,
+        collapsable: true, // 可选的, 默认值是 true,
         sidebarDepth: 1,    // 可选的, 默认值是 1
+        children: [
+          '/Infras/Cache/',
+          '/Infras/MQ/',
+          '/Infras/RPC/',
+          '/Infras/Nginx/',
+        ]
       },
       {
         title: '数据库',   // 必要的
@@ -50,6 +73,12 @@ module.exports = {
           '/Database/MySQL/',
           '/Database/Redis/',
         ]
+      },
+      {
+        title: '设计模式',   // 必要的
+        path: '/RD/design-pattern/',      // 可选的
+        collapsable: true, // 可选的, 默认值是 true,
+        sidebarDepth: 1,    // 可选的, 默认值是 1
       }
     ]
   }

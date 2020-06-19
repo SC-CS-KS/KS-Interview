@@ -7,4 +7,4 @@ github() {
    git $@
 }
 
-cd .vuepress/dist && rm -rf .git && github init && github add . && github commit -m "sunnychan" && github push -f https://github.com/SunnnyChan/KS-Interview master:gh-pages 
+cd .vuepress/dist && rm -rf .git && github init && github add . && github commit -m "sunnychan" && github push -f https://github.com/SC-CS-KS/KS-Interview.git master:gh-pages 
