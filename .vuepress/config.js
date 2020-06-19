@@ -1,6 +1,6 @@
 // .vuepress/config.js
 module.exports = {
-  title: 'Get Offer',  // 设置网站标题
+  title: 'Interview 知识体系',  // 设置网站标题
   description : "",
   base : '/KS-Interview/',
   themeConfig: {
@@ -72,6 +72,21 @@ module.exports = {
         children: [
           '/Database/MySQL/',
           '/Database/Redis/',
+        ]
+      },
+      {
+        title: 'Web',   // 必要的
+        path: '/RD/web/',      // 可选的
+        collapsable: false, // 可选的, 默认值是 true,
+        sidebarDepth: 1,    // 可选的, 默认值是 1
+      },
+      {
+        title: '编程范式',   // 必要的
+        path: '/RD/paradigms/',      // 可选的
+        collapsable: true, // 可选的, 默认值是 true,
+        sidebarDepth: 1,    // 可选的, 默认值是 
+        children: [
+          '/RD/paradigms/OOP/',
         ]
       },
       {

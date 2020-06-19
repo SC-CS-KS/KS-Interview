@@ -1,35 +1,30 @@
 # 面试
 
+Interview  知识体系。  https://sc-cs-ks.github.io/KS-Interview 
+
 [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-Tables of Content
+Table of Content
 =================
 
    * [<a href="Resume/README.md">简历</a>](#简历)
    * [应聘](#应聘)
       * [<a href="Apply/InspectionPoint.md">面试考察点</a>](#面试考察点)
-      * [<a href="Apply/_practice/README.md">面试经验</a>](#面试经验)
+      * [<a href="Apply/_practice/Sunny.md">面试经验</a>](#面试经验)
    * [招聘](#招聘)
       * [<a href="Recruit/README.md">如何面试（招聘）？</a>](#如何面试招聘)
       * [面试理论](#面试理论)
-         * [<a href="Recruit/IceTheory.md">“冰山”理论</a>](#冰山理论)
-         * [<a href="Recruit/TBEITheory.md">目标-行为事件访谈法</a>](#目标-行为事件访谈法)
-      * [<a href="Recruit/InspectionPoint.md">面试考察点</a>](#面试考察点-1)
-      * [<a href="Recruit/Skills.md">面试技巧</a>](#面试技巧)
-   * [RD](#rd)
-      * [基础技术](#基础技术)
-         * [<a href="RD/tech/java/README.md">Java</a>](#java)
-         * [<a href="RD/tech/design-pattern/README.md">Design Pattern</a>](#design-pattern)
-         * [<a href="RD/tech/paradigms/OOP.md">OOP</a>](#oop)
-         * [<a href="RD/tech/web/README.md">Web</a>](#web)
-         * [MySQL](#mysql)
-         * [Redis](#redis)
-         * [Cache](#cache)
-         * [MQ](#mq)
-         * [HA](#ha)
-         * [HP](#hp)
-      * [<a href="RD/coding/README.md">编码能力</a>](#编码能力)
-      * [<a href="https://github.com/SunnnyChan/half-hour-of-ALGS">算法</a>](#算法)
+         * [<a href="Recruit/Theories/IceTheory.md">“冰山”理论</a>](#冰山理论)
+         * [<a href="Recruit/Theories/TBEITheory.md">目标-行为事件访谈法</a>](#目标-行为事件访谈法)
+      * [<a href="Recruit/InspectionPoint/README.md">面试考察点</a>](#面试考察点-1)
+      * [<a href="Recruit/Skills/README.md">面试技巧</a>](#面试技巧)
+   * [技术](#技术)
+      * [<a href="Java/README.md">Java</a>](#java)
+      * [<a href="RD/design-pattern/README.md">Design Pattern</a>](#design-pattern)
+      * [<a href="RD/paradigms/OOP.md">OOP</a>](#oop)
+      * [<a href="RD/web/README.md">Web</a>](#web)
+      * [<a href="Database/README.md">数据库</a>](#数据库)
+      * [<a href="Algos/README.md">算法</a>](#算法)
          * [<a href="LeetCode/README.md">LeetCode</a>](#leetcode)
       * [工程](#工程)
          * [需求分析](#需求分析)
@@ -42,4 +37,3 @@ Tables of Content
       * [<a href="Q&amp;A/OpenQuestion.md">开放性问题</a>](#开放性问题)
    * [软实力](#软实力)
       * [沟通](#沟通)
-

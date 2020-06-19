@@ -1,4 +1,4 @@
-# Java Basic
+# Java 基础
 
 ## object中定义了哪些方法？
 
