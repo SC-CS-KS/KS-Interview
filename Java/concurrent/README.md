@@ -1,7 +1,5 @@
 # Concurrent  
 
-## [JMM](JMM.md)
-
 ## [线程](Thread.md)  
 
 ## [JUC](JUC.md)
