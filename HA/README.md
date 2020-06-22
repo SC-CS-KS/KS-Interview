@@ -30,3 +30,18 @@
 
 ## 如何设计一个高可用系统？  
 
+## 如何设计一个高并发系统？  
+
+思路：  
+* 系统拆分  
+* 缓存  
+* MQ  
+* 分库分表  
+* 读写分离  
+* ElasticSearch  
+ES 是分布式的，可以随便扩容，分布式天然就可以支撑高并发，因为可以通过扩容来扛更高的并发。  
+一些比较简单的查询、统计类的操作，可以考虑用 es 来承载，  
+还有一些全文搜索类的操作，也可以考虑用 es 来承载。  
+
+[参考](https://doocs.github.io/advanced-java/#/./docs/high-concurrency/high-concurrency-design)  
+

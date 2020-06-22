@@ -30,6 +30,7 @@ module.exports = {
           '/Java/JVM/',
           '/Java/Spring/',
           '/Java/Netty/',
+          '/Java/HowToDoInJava/',
         ]
       },
       {
