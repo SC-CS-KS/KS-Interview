@@ -81,6 +81,17 @@ module.exports = {
         sidebarDepth: 1,    // 可选的, 默认值是 1
       },
       {
+        title: '高可用',   // 必要的
+        path: '/HA/',      // 可选的
+        collapsable: false, // 可选的, 默认值是 true,
+        sidebarDepth: 1,    // 可选的, 默认值是 1
+        children: [
+          '/HA/throttling/',
+          '/HA/downgrade/',
+          '/HA/fusing/',
+        ]
+      },
+      {
         title: '编程范式',   // 必要的
         path: '/RD/paradigms/',      // 可选的
         collapsable: true, // 可选的, 默认值是 true,
