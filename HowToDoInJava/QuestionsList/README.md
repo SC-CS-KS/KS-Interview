@@ -8,7 +8,7 @@
 
 [Core Java Interview Questions – Part 1](https://howtodoinjava.com/interview-questions/core-java-interview-questions-series-part-1/)  
 
-* 如何在Java中创建不可变对象？使用不可变对象的收益是什么？  
+#### 如何在Java中创建不可变对象？使用不可变对象的收益是什么？  
 
 不可变类是指一旦创建，其状态就不能更改的类。  
 在这里，对象的状态本质上是指存储在实例变量中的值，无论它们是基本类型还是引用类型。   
@@ -44,7 +44,7 @@
 
 [示例代码](https://github.com/SunnnyChan/java-demo/blob/master/demo-interview/src/main/java/me/sunny/demo/interview/howtodoinjava/ImmutableClass.java)  
 
-* Java是引用传递还是值传递？  
+#### Java是引用传递还是值传递？  
 
 Java 规范说，Java没有引用传递，所有都是值传递。  
 ***Java是值传递而不是引用传递***  
@@ -60,7 +60,7 @@ Java 规范说，Java没有引用传递，所有都是值传递。
 值就直接保存在变量中，而String等是引用类型，变量中保存的只是实际对象的地址。  
 一般称这种变量为"引用"，引用指向实际对象，实际对象中保存着内容。  
 
-* finally块的用途是什么？finally块是否可以确保被调用？如果不能，何时不被调用？  
+#### finally块的用途是什么？finally块是否可以确保被调用？如果不能，何时不被调用？  
 
 try块退出时，finally块始终执行，这样可以确保即使发生异常，finally块也会被执行。  
 finally 不仅仅对异常处理有用，它使得程序员可以避免因return，continue或break而意外绕过执行清理代码。  
@@ -69,7 +69,7 @@ finally 不仅仅对异常处理有用，它使得程序员可以避免因return
 如果在执行try或catch代码时JVM退出，则finally块可能不会执行。 
 同样，如果执行try或catch代码的线程被中断或杀死，即使整个应用程序继续运行，finally块也可能不会执行。  
 
-* 为什么有两个Date类？一个在java.util包中，另一个在java.sql中？  
+#### 为什么有两个Date类？一个在java.util包中，另一个在java.sql中？  
 
 
 
