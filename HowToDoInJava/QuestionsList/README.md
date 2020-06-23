@@ -6,42 +6,137 @@
 
 ### 第一部分 
 
-* 如何在Java中创建不可变对象？算上所有好处？  
-* Java是按引用传递还是按值传递？  
-* finally块的用途是什么？Java中的finally块是否可以保证被调用？ 最终何时不调用块？
-* 为什么有两个Date类；为什么？ 一个在java.util包中，另一个在java.sql中？
-* 什么是标记界面？
-* 为什么Java中的main（）被声明为public static void main？
-* 将String创建为new()和原义文字有什么区别？
-* String中的substring()如何工作？
+[Core Java Interview Questions – Part 1](https://howtodoinjava.com/interview-questions/core-java-interview-questions-series-part-1/)  
+
+* 如何在Java中创建不可变对象？使用不可变对象的收益是什么？  
+
+不可变类是指一旦创建，其状态就不能更改的类。  
+在这里，对象的状态本质上是指存储在实例变量中的值，无论它们是基本类型还是引用类型。   
+
+要使类不可变，需要遵循以下步骤：  
+
+1. 不提供 setter方法，避免对象的字段被修改  
+2. 所有字段声明为final和private  
+3. 不允许子类重写父类方法
+最简单的方法是将类声明为final，以限制子类继承父类。 
+更好点的方式是将构造方法设为private，同时通过工厂方法来创建实例。  
+4. 如果域包含其他可变类的对象，也要禁止这些对象被修改：
+（1）不提供修改可变对象的方法  
+（2）不要共享指向可变对象的引用
+不要存储那些传进构造方法的外部可变对象的引用；如果需要，创建拷贝，保存指向拷贝的引用。  
+类似的，在创建方法返回值时，避免返回原始的内部可变对象，而是返回可变对象的拷贝。  
+
+[参考：A Strategy for Defining Immutable Objects](https://docs.oracle.com/javase/tutorial/essential/concurrency/imstrat.html)
+[参考：How to create immutable class in Java](https://howtodoinjava.com/java/basics/how-to-make-a-java-class-immutable/)
+
+不可变类的优势： 
+
+1. 创建、测试和使用都很简单。  
+2. 线程安全，没有同步问题  
+3. 不需要拷贝构造方法  
+4. 不需要实现Clone方法  
+5. 可以缓存类的返回值，允许hashCode使用惰性初始化方式  
+6. 不需要防御式复制  
+7. 适合用作Map的key和Set的元素（因为集合里这些对象的状态不能改变）
+8. 类一旦构造完成就是不变式，不需要再次检查  
+9. 总是“failure atomicity”（原子性失败）：
+如果一个不可变对象抛出异常，它从不会保留一个烦人的或者不确定的状态  
+
+[示例代码](https://github.com/SunnnyChan/java-demo/blob/master/demo-interview/src/main/java/me/sunny/demo/interview/howtodoinjava/ImmutableClass.java)  
+
+* Java是引用传递还是值传递？  
+
+Java 规范说，Java没有引用传递，所有都是值传递。  
+***Java是值传递而不是引用传递***  
+如果Java是引用传递，我们应该可以像C语言一样交换对象，而这在Java中是做不到的。  
+
+向方法传递实例时，它的内存地址会被1比特1比特的复制到一个新的引用变量中，它们都指向相同的实例。 
+但是如果你在方法内改变这个引用，原始引用不会改变。  
+如果是引用传递，原始引用也会改变。  
+
+[参考：Java Pass-by-Value vs. Pass-by-Reference](https://howtodoinjava.com/java/basics/java-is-pass-by-value-lets-see-how/)  
+
+注：  
+值就直接保存在变量中，而String等是引用类型，变量中保存的只是实际对象的地址。  
+一般称这种变量为"引用"，引用指向实际对象，实际对象中保存着内容。  
+
+* finally块的用途是什么？finally块是否可以确保被调用？如果不能，何时不被调用？  
+
+try块退出时，finally块始终执行，这样可以确保即使发生异常，finally块也会被执行。  
+finally 不仅仅对异常处理有用，它使得程序员可以避免因return，continue或break而意外绕过执行清理代码。  
+将清理代码放在finally块中是一个好习惯，即使可能没有异常发生。  
+
+如果在执行try或catch代码时JVM退出，则finally块可能不会执行。 
+同样，如果执行try或catch代码的线程被中断或杀死，即使整个应用程序继续运行，finally块也可能不会执行。  
+
+* 为什么有两个Date类？一个在java.util包中，另一个在java.sql中？  
+
+
+
+* 什么是标记界面？  
+
+* 为什么Java中的main（）被声明为public static void main？  
+
+* 将String创建为new()和原义文字有什么区别？  
+
+* String中的substring()如何工作？  
+
 * 解释HashMap的工作。  
-* 接口和抽象类之间的区别？  
-* 什么时候覆盖hashCode和equals（）？  
+
+* 接口和抽象类之间的区别？   
+
+* 什么时候重写hashCode()和equals()？    
 
 ### 第二部分  
 
-* 为什么要避免使用finalize（）方法？  
-* 为什么不应该在多线程环境中使用HashMap？ 它也会引起无限循环吗？  
-* 解释抽象和封装？ 它们有什么关系？  
-* 接口和抽象类之间的区别？  
-* StringBuffer如何保存内存？  
+* 为什么要避免使用finalize()方法？  
+
+* 为什么不应该在多线程环境中使用HashMap？它也会引起无限循环吗？  
+
+* 解释抽象和封装？们有什么关系？  
+
+* 接口和抽象类之间的区别？
+
+* StringBuffer如何保存内存？
+
 * 为什么在对象类而不是线程中声明了wait and notify？  
+
 * 编写Java程序以在Java中创建死锁并修复死锁？  
-* 如果您的Serializable类包含一个不可序列化的成员，该怎么办？ 您如何解决？  
-* 解释Java中的瞬态和volatile关键字？  
+
+* 如果您的 Serializable 类包含一个不可序列化的成员，该怎么办？如何解决？  
+
+* 解释Java中的 transient 和 volatile 关键字？  
+
 * Iterator和ListIterator之间的区别？  
 
 ### 第三部分
 
-* 什么是同步？ 类级别锁定和对象级别锁定？  
-* sleep（）和wait（）之间的区别？  
-* 您可以为该参考变量分配null吗？  
-* 如果&&和＆??之间的区别怎么办？  
-* 如何重写equals和hashCode（）方法？  
+* 什么是同步？类级别锁定和对象级别锁定？  
+
+* sleep()和wait()之间的区别？  
+
+* 可以给 this 引用变量赋值null吗？  
+
+不可以。  
+在java中，赋值语句的左边必须是一个变量。  
+this 是一个表示当前实例的特殊关键字，它不是变量。类似地，null也不能分配给 super 等类似关键字。  
+
+* &&和＆之间的区别？  
+
+&是位运算，&&是逻辑运算  
+
+＆评估计算的双方。  
+&&评估计算对象的左侧，如果是，则继续并评估右侧。  
+
+* 如何重写equals和hashCode()方法？  
+
 * 解释所有访问修饰符？
-* 什么是垃圾收集？ 我们可以执行吗？
+
+* 什么是垃圾收集？我们可以执行吗？
 * 什么是原生关键字？  
-* 什么是序列化？ 解释渔获物？  
+
+* 什么是序列化？解释渔获物？  
+
 
 ## 1.2 对象初始化的最佳做法
 
