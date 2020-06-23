@@ -2,13 +2,11 @@
 
 [Java Interview Questions](https://howtodoinjava.com/java-interview-questions/)  
 
-## 1.1 核心Java面试问题系列
-
-### 第一部分 
+## 1.1 核心Java面试问题系列 - 第一部分
 
 [Core Java Interview Questions – Part 1](https://howtodoinjava.com/interview-questions/core-java-interview-questions-series-part-1/)  
 
-#### 如何在Java中创建不可变对象？使用不可变对象的收益是什么？  
+### 如何在Java中创建不可变对象？使用不可变对象的收益是什么？  
 
 不可变类是指一旦创建，其状态就不能更改的类。  
 在这里，对象的状态本质上是指存储在实例变量中的值，无论它们是基本类型还是引用类型。   
@@ -44,7 +42,7 @@
 
 [示例代码](https://github.com/SunnnyChan/java-demo/blob/master/demo-interview/src/main/java/me/sunny/demo/interview/howtodoinjava/ImmutableClass.java)  
 
-#### Java是引用传递还是值传递？  
+### Java是引用传递还是值传递？  
 
 Java 规范说，Java没有引用传递，所有都是值传递。  
 ***Java是值传递而不是引用传递***  
@@ -60,7 +58,7 @@ Java 规范说，Java没有引用传递，所有都是值传递。
 值就直接保存在变量中，而String等是引用类型，变量中保存的只是实际对象的地址。  
 一般称这种变量为"引用"，引用指向实际对象，实际对象中保存着内容。  
 
-#### finally块的用途是什么？finally块是否可以确保被调用？如果不能，何时不被调用？  
+### finally块的用途是什么？finally块是否可以确保被调用？如果不能，何时不被调用？  
 
 try块退出时，finally块始终执行，这样可以确保即使发生异常，finally块也会被执行。  
 finally 不仅仅对异常处理有用，它使得程序员可以避免因return，continue或break而意外绕过执行清理代码。  
@@ -69,25 +67,23 @@ finally 不仅仅对异常处理有用，它使得程序员可以避免因return
 如果在执行try或catch代码时JVM退出，则finally块可能不会执行。 
 同样，如果执行try或catch代码的线程被中断或杀死，即使整个应用程序继续运行，finally块也可能不会执行。  
 
-#### 为什么有两个Date类？一个在java.util包中，另一个在java.sql中？  
+### 为什么有两个Date类？一个在java.util包中，另一个在java.sql中？  
 
+### 什么是标记界面？  
 
+### 为什么Java中的main（）被声明为public static void main？  
 
-* 什么是标记界面？  
+### 将String创建为new()和原义文字有什么区别？  
 
-* 为什么Java中的main（）被声明为public static void main？  
+### String中的substring()如何工作？  
 
-* 将String创建为new()和原义文字有什么区别？  
+### 解释HashMap的工作。  
 
-* String中的substring()如何工作？  
+### 接口和抽象类之间的区别？   
 
-* 解释HashMap的工作。  
+### 什么时候重写hashCode()和equals()？    
 
-* 接口和抽象类之间的区别？   
-
-* 什么时候重写hashCode()和equals()？    
-
-### 第二部分  
+## 1.1 核心Java面试问题系列 - 第二部分 
 
 * 为什么要避免使用finalize()方法？  
 
@@ -109,33 +105,33 @@ finally 不仅仅对异常处理有用，它使得程序员可以避免因return
 
 * Iterator和ListIterator之间的区别？  
 
-### 第三部分
+## 1.1 核心Java面试问题系列 - 第三部分  
 
-* 什么是同步？类级别锁定和对象级别锁定？  
+### 什么是同步？类级别锁定和对象级别锁定？  
 
-* sleep()和wait()之间的区别？  
+### sleep()和wait()之间的区别？  
 
-* 可以给 this 引用变量赋值null吗？  
+### 可以给 this 引用变量赋值null吗？  
 
 不可以。  
 在java中，赋值语句的左边必须是一个变量。  
 this 是一个表示当前实例的特殊关键字，它不是变量。类似地，null也不能分配给 super 等类似关键字。  
 
-* &&和＆之间的区别？  
+### &&和＆之间的区别？  
 
 &是位运算，&&是逻辑运算  
 
 ＆评估计算的双方。  
 &&评估计算对象的左侧，如果是，则继续并评估右侧。  
 
-* 如何重写equals和hashCode()方法？  
+### 如何重写equals和hashCode()方法？  
 
-* 解释所有访问修饰符？
+### 解释所有访问修饰符？
 
-* 什么是垃圾收集？我们可以执行吗？
-* 什么是原生关键字？  
+### 什么是垃圾收集？我们可以执行吗？
+### 什么是原生关键字？  
 
-* 什么是序列化？解释渔获物？  
+### 什么是序列化？解释渔获物？  
 
 
 ## 1.2 对象初始化的最佳做法
