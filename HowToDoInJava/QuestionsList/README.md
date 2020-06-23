@@ -1,4 +1,6 @@
-# HowToDoInJava - Java Interview Questions  
+# Java Interview Questions List
+
+[Java Interview Questions](https://howtodoinjava.com/java-interview-questions/)  
 
 ## 1.1 核心Java面试问题系列
 
@@ -10,11 +12,11 @@
 * 为什么有两个Date类；为什么？ 一个在java.util包中，另一个在java.sql中？
 * 什么是标记界面？
 * 为什么Java中的main（）被声明为public static void main？
-* 将String创建为new（）和原义文字有什么区别？
-* String中的substring（）如何工作？
-* 解释HashMap的工作。
-* 接口和抽象类之间的区别？
-* 什么时候覆盖hashCode和equals（）？
+* 将String创建为new()和原义文字有什么区别？
+* String中的substring()如何工作？
+* 解释HashMap的工作。  
+* 接口和抽象类之间的区别？  
+* 什么时候覆盖hashCode和equals（）？  
 
 ### 第二部分  
 
@@ -213,4 +215,134 @@ java.util.UUID
 * Thread and Runnable的区别?  
 * 通过 Runnable interface 创建可以运行线程？
 * 两者之间应首选哪种方法？  
+
+## 2.4 Compare and Swap [CAS] 算法
+
+* 什么是乐观锁定和悲观锁定？  
+* 什么是CAS算法？  
+* 什么是原子操作？  
+* AtomicInteger和AtomicLong如何工作？  
+
+## 2.5 Fork / Join框架是什么?
+
+
+## 2.6 什么是ThreadPoolExecutor？  
+
+## 2.7 Java executor 框架  
+
+## 2.8 如何用Java编写死锁并解决  
+
+## 3.1 最佳实践指南  
+
+## 3.2 一些难题
+
+## 3.3 刷设计模式  
+
+## 3.4 随机浏览核心Java主题  
+
+## 4.1 Spring Core 的面试问题  
+
+* 什么是控制反转（IoC）和依赖注入（DI）？
+
+* BeanFactory和ApplicationContext之间的区别？
+
+* 什么是基于Spring Java的配置？
+
+* 解释Spring Bean的生命周期？
+
+* Spring Bean范围有哪些不同？
+
+* 在Spring Framework中，Singleton bean线程安全吗？
+
+* 解释Bean自动装配的不同模式？
+
+* 用示例解释@Qualifier注释？
+
+* 构造函数注入和setter注入之间的区别？
+
+* 列举一下Spring框架中使用的一些设计模式吗？
+
+## 4.2. Spring AOP
+
+* 关注点和跨领域关注点之间的区别？
+
+* 有哪些可用的AOP实现？
+
+* Spring AOP中 有哪些不同的建议类型？
+
+* 什么是Spring AOP代理？
+
+* 什么是连接点和切点？
+
+* 什么是纵横编织？
+
+## 4.3. Spring MVC
+
+* 什么是MVC架构？
+
+* 什么是DispatcherServlet和ContextLoaderListener？
+
+* 如何使用基于Java的配置？
+
+* 我们如何使用Spring创建返回JSON响应的Restful Web Service？
+
+* <context：annotation-config>与<context：component-scan>之间的区别？
+
+* @Component，@ Controller，@ Repository和@Service批注之间的区别？
+
+* Spring MVC如何提供验证支持？
+
+* 什么是Spring MVC拦截器以及如何使用？
+
+* 如何在Spring MVC Framework中处理异常？
+
+* 如何在Spring MVC应用程序中实现本地化？
+
+## 5.1 针对Oracle企业管理项目的Java面试问题  
+
+* 您可以开始讲述自己和您的项目吗？
+
+* 什么是Java中的抽象和封装？
+
+* 方法重载规则？
+
+* Java的扩大和缩小？
+
+* 我可以只尝试代码块吗？
+
+* 线程：生产者和消费者有问题吗？
+
+* 为什么在Object类中定义了wait（），notify（）和notifyAll（）？
+
+* 我们可以覆盖wait（）或notify（）方法吗？
+
+* wait（），sleep（）和yield（）之间的区别？
+
+* 解释一下线程类中的join（）方法？
+
+* 您是否遇到了内存不足错误？ 如果是，您如何解决？ 告诉不同的情况为什么会这样？
+
+* 数据库连接泄漏？
+
+* 编写程序以使用第三个变量交换两个数字？
+
+* 编写程序对数组进行排序并删除重复项？
+
+* 在Singleton上编写程序？
+
+* 写一个程序合并两个数组？
+
+* final和final关键字有什么用？
+
+* 我可以将类声明为静态还是私有的吗？
+
+* 为什么你想要改变公司？
+
+## 5.2 中级开发人员的Java面试问题  
+
+## 6.1. Java Puzzlers
+
+## 6.2. Java Concurrency in Practice
+
+## 6.3. Effective Java by Joshua Bloch
 

@@ -1,6 +1,6 @@
 // .vuepress/config.js
 module.exports = {
-  title: 'Interview 知识体系',  // 设置网站标题
+  title: '',  // 设置网站标题
   description : "",
   base : '/KS-Interview/',
   themeConfig: {
@@ -9,7 +9,7 @@ module.exports = {
     ],
     sidebar: [
       {
-        title: '计算机基础',   // 必要的
+        title: '基础',   // 必要的
         path: '/CSBasics/',      // 可选的
         collapsable: true, // 可选的, 默认值是 true,
         sidebarDepth: 1,    // 可选的, 默认值是 1
@@ -30,7 +30,22 @@ module.exports = {
           '/Java/JVM/',
           '/Java/Spring/',
           '/Java/Netty/',
-          '/Java/HowToDoInJava/',
+        ]
+      },
+      {
+        title: 'HowToDoInJava',   // 必要的
+        path: '/HowToDoInJava/',      // 可选的
+        collapsable: true, // 可选的, 默认值是 true,
+        sidebarDepth: 1,    // 可选的, 默认值是 1
+        children: [
+          '/HowToDoInJava/QuestionsList/',
+          '/HowToDoInJava/String/',
+          '/HowToDoInJava/Collection/',
+          '/HowToDoInJava/HashMap/',
+          '/HowToDoInJava/Spring/',
+          '/HowToDoInJava/Oracle-Interview-Questions/',
+          '/HowToDoInJava/JavaPuzzlesList/',
+          '/HowToDoInJava/Mid-level-Developer-Interview/',
         ]
       },
       {
