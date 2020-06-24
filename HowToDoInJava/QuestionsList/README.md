@@ -69,41 +69,181 @@ finally 不仅仅对异常处理有用，它使得程序员可以避免因return
 
 ### 为什么有两个Date类？一个在java.util包中，另一个在java.sql中？  
 
-### 什么是标记界面？  
+java.util.Date表示日期和时间。  
+java.sql.Date仅表示日期，没有时间部分，java.sql.Time，表示时间。  
 
-### 为什么Java中的main（）被声明为public static void main？  
+java.sql.Date是java.util.Date的子类（扩展）。 
+因此，java.sql.Date 做了一些改变：  
+toString()生成字符串形式不同：yyyy-mm-dd；  
+静态valueOf(String)方法，用于从具有上述表示形式的字符串中创建日期；      
+不建议使用小时，分钟和秒的 getters 和 setter 方法已经废弃。    
 
-### 将String创建为new()和原义文字有什么区别？  
+java.sql.Date类与JDBC一起使用，它不应有时间部分，即小时，分钟，秒，毫秒应为零，但是并不强制。  
+
+### 什么是标记接口？  
+
+标记器接口模式是计算机科学中的一种设计模式，与提供有关对象的运行时类型信息的语言一起使用。  
+它提供了一种将元数据与一个类相关联的方法，其中该语言对该类元数据没有明确的支持。   
+在Java中，表现为不包含方法的接口。  
+
+在Java中使用标记接口的一个很好的例子是Serializable接口。   
+一个类实现此接口，以标识可以将其非 transient 数据成员写入字节流或文件系统。  
+
+标记接口的主要问题是接口为实现类定义了契约，该契约会被所有子类继承，这意味着在子类中你只能实现标记接口。   
+如果创建的子类不想被序列化（可能是因为它依赖于transient状态），则必须诉诸显式抛出 NotSerializableException。  
+
+### 为什么Java中的main函数被声明为public static void？  
+
+为什么是public？  
+main方法是public，任何一个想要启动应用程序的对象在任何地方都可以访问它。  
+
+为什么是静态的？   
+假设main方法不是静态方法，要调用任何方法，需要它的一个实例。  
+众所周知，Java可以有重载的构造函数，JVM 就没法确定调用哪个 main 方法。  
+
+补充：  
+静态方法和静态数据加载到内存就可以直接调用而不需要像实例方法一样创建实例后才能调用，  
+如果 main 方法是静态的，那么它就会被加载到 JVM 上下文中成为可直接执行的方法。  
+
+为什么返回值为void？  
+这样就不会返回一个无用的返回值给JVM。   
+应用程序要与调用过程进行通信的唯一一件事是：正常终止或异常终止。   
+使用System.exit(int)已经可以做到这一点。 非零值表示异常终止，否则一切正常。  
+
+### 使用new()和字面意思(直接双引号引用)创建字符串有什么区别？  
+
+使用new()创建String时，会在堆中创建并添加到字符串池中，而使用字面意思创建时，仅在字符串池（存在于堆的Perm区）中创建。  
 
 ### String中的substring()如何工作？  
 
-### 解释HashMap的工作。  
+Java中的字符串与其他编程语言一样，是一串字符。  
+这个字符序列在下面的变量中维护：  
+```java
+/** The value is used for character storage. */
+private final char value[];
+```
+
+要在不同情况下访问此数组，请使用以下变量：  
+```java
+/** The offset is the first index of the storage that is used. */
+private final int offset;
+
+/** The count is the number of characters in the String. */
+private final int count;
+```  
+
+每当我们从任何现有的字符串实例创建子字符串时，substring()方法都只会设置offset和count变量的新值，内部char数组不变。  
+如果不小心使用substring()方法，则可能是内存泄漏的原因。  
+
+注：
+
+JDK1.6 的实现有可能导致内存泄露，引用同一个字符数组会导致GC无法回收空间，因为即使原字符串做了释放，但子字符串的引用仍在。  
+
+[内存泄露](https://blog.csdn.net/diaorenxiang/article/details/39155237)
+[实现原理](https://www.cnblogs.com/V1haoge/p/10755235.html) 从这里看，JDK7 之后实现是会产生新的字符数组的。  
+
+### 解释HashMap的工作原理，如何解决冲突？  
+
+HashMap有一个内部类Entry：  
+```java
+static class Entry<k ,V> implements Map.Entry<k ,V>
+{
+    final K key;
+    V value;
+    Entry<k ,V> next;
+    final int hash;
+    ...//More code goes here
+}
+```
+当需要存储键值对时：  
+1. 首先，检查key是否为null，是，则值存储在table[0]位置，因为null的Hash 码 始终为0。  
+2. 接下来，对key 使用Hash Code 通过调用hashCode()计算哈希值，该哈希值用于计算数组中用于存储Entry对象的索引。  
+3. 此时，调用indexFor(hash, table.length)函数来计算精确索引位置。  
+4. 接下来是主要部分。  
+现在，我们知道两个不相等的对象可以有相同的哈希码值，两个不同的对象将如何存储在相同的数组位置[称为bucket]，答案是LinkedList。  
+Entry类有一个next属性，这个属性总是指向链表中的下一个对象。  
+
+因此，在发生冲突时，Entry对象以LinkedList的形式存储。  
+当需要在特定索引中存储Entry对象时，HashMap检查是否已经存在，如果没有，则存储在此位置。  
+
+如果已经有一个对象位于索引上，则检查它的next属性。  
+如果为空，则当前Entry对象将成为LinkedList中的下一个节点。  
+如果next变量不为null，则遍历，直到next变量是null为止。  
+
+如果我们添加另一个值对象，其键值与前面输入的键值相同。从逻辑上讲，它应该替换旧值。是怎么做到的呢?  
+在确定Entry对象的索引位置之后，当遍历LinkedList时，HashMap对每个Entry对象的键对象调用equals()方法。  
+LinkedList中的所有这些HashMap对象都具有类似的哈希码，但equals()方法将测试是否真正相等。  
+如果key.equals(k)为真，那么两个键都被视为相同的键对象，此时会做Entry对象替换。  
+
+通过这种方式， HashMap 确保键的惟一性。  
+
+注：  
+put 的思路  
+1. 对key的hashCode()做hash，然后再计算index;
+2. 如果没碰撞直接放到bucket里；
+3. 如果碰撞了，以链表的形式存在buckets后；
+4. 如果碰撞导致链表过长(大于等于TREEIFY_THRESHOLD)，就把链表转换成红黑树；
+5. 如果节点已经存在就替换old value(保证key的唯一性)
+6. 如果bucket满了(超过load factor*current capacity)，就要resize。
+
+get 的思路  
+1. bucket里的第一个节点，直接命中；  
+2. 如果有冲突，则通过key.equals(k)去查找对应的 Entry  
+(1) 若为树，则在树中通过key.equals(k)查找，O(logn)；  
+(2) 若为链表，则在链表中通过key.equals(k)查找，O(n)。  
 
 ### 接口和抽象类之间的区别？   
 
+1. Java接口中声明的变量默认是final，抽象类可以包含非final变量。  
+2. Java接口是隐式抽象的，接口中不能有实现，Java抽象类可以拥有实现默认行为的实例方法。  
+3. 默认情况下，Java接口的成员是公共的，Java抽象类可以具有通常的类成员样式，如private或abstract等。  
+4. Java接口应使用关键字implements实现；抽象类使用关键字extends扩展。  
+5. Java类可以实现多个接口，但只能扩展一个抽象类。  
+6. 接口是不能实例化；Java抽象类也不能实例化，但如果存在main()，则可以调用它。  
+    从Java 8开始，可以在接口中定义默认方法。
+7. 抽象类比interface稍微快一些，因为interface在调用Java中任何被覆盖的方法之前都要进行搜索(肯能有多个实现)。  
+
 ### 什么时候重写hashCode()和equals()？    
+
+hashCode()和equals()方法已经在Object类中定义，Object类是java对象的父类。  
+因此，所有Java对象都继承这些方法的默认实现。  
+
+hashCode()方法用于获取给定对象的唯一整数。   
+当需要将该对象存储在诸如散列表等数据结构中时，这个整数用于确定bucket位置。  
+默认情况下，对象的hashCode()方法返回存储对象的内存地址的整数表示。  
+
+equals()方法，顾名思义，用于验证两个对象的相等性。默认实现只是检查两个对象的对象引用，以验证它们是否相等。  
+请注意，每当重写equals()方法时，通常都需要重写hashCode方法，  
+以便维护hashCode()方法的通用契约，该契约规定equal对象必须具有相等的哈希码。  
+
+1. equals()必须定义相等关系(它必须是自反的、对称的和传递的)。  
+此外，它必须是一致的(如果对象没有被修改，那么它必须一直返回相同的值)，o.equals(null)必须总是返回false。  
+2. hashCode()也必须是一致的(如果没有根据equals()修改对象，则必须始终返回相同的值)。  
+
+这两个方法之间的关系是:  
+当a.equals(b)为真时，那么a.hashCode()必须与b.hashCode()相同。  
 
 ## 1.1 核心Java面试问题系列 - 第二部分 
 
-* 为什么要避免使用finalize()方法？  
+### 为什么要避免使用finalize()方法？  
 
-* 为什么不应该在多线程环境中使用HashMap？它也会引起无限循环吗？  
+### 为什么不应该在多线程环境中使用HashMap？它也会引起无限循环吗？  
 
-* 解释抽象和封装？们有什么关系？  
+### 解释抽象和封装？们有什么关系？  
 
-* 接口和抽象类之间的区别？
+### 接口和抽象类之间的区别？
 
-* StringBuffer如何保存内存？
+### StringBuffer如何保存内存？
 
-* 为什么在对象类而不是线程中声明了wait and notify？  
+### 为什么在对象类而不是线程中声明了wait and notify？  
 
-* 编写Java程序以在Java中创建死锁并修复死锁？  
+### 编写Java程序以在Java中创建死锁并修复死锁？  
 
-* 如果您的 Serializable 类包含一个不可序列化的成员，该怎么办？如何解决？  
+### 如果您的 Serializable 类包含一个不可序列化的成员，该怎么办？如何解决？  
 
-* 解释Java中的 transient 和 volatile 关键字？  
+### 解释Java中的 transient 和 volatile 关键字？  
 
-* Iterator和ListIterator之间的区别？  
+### Iterator和ListIterator之间的区别？  
 
 ## 1.1 核心Java面试问题系列 - 第三部分  
 
@@ -143,18 +283,18 @@ this 是一个表示当前实例的特殊关键字，它不是变量。类似地
 
 ## 1.3 HashMap 是如何工作的
 
-* HashMap如何存储键值对？  
-* HashMap如何解决冲突？  
-* HashMap中如何使用hashCode（）和equals（）方法？  
-* 密钥的随机/固定hashCode（）值的影响？  
-* 在多线程环境中使用HashMap？  
+### HashMap如何存储键值对？  
+### HashMap如何解决冲突？  
+### HashMap中如何使用hashCode（）和equals（）方法？  
+### key的随机/固定hashCode（）值的影响？  
+### 在多线程环境中使用HashMap？  
 
 ## 1.4 HashMap Key 好的设计
 
-* 为什么String是HashMap的好钥匙？  
-* 您将如何设计一个用作键的类？    
-* 您将重写Key类中的hashCode（）方法吗？ 有什么影响？  
-* 为可以作为HashMap关键对象的类编写语法？  
+### 为什么String是HashMap的好钥匙？  
+### 您将如何设计一个用作键的类？    
+### 您将重写Key类中的hashCode（）方法吗？ 有什么影响？  
+### 为可以作为HashMap关键对象的类编写语法？  
 
 ## 1.5 ConcurrentHashMap 相关问题
 
@@ -164,24 +304,24 @@ HashMap不是线程安全的。
 
 ## 1.6 Java 集合框架 相关问题  
 
-* 解释 Collections 层次？  
-* 集和列表之间的区别？  
-* Vector和ArrayList之间的区别？
-* HashMap和HashTable之间的区别？
-* Iterator和ListIterator之间的区别？
-* 为什么Map接口没有扩展Collection接口？
-* 如何将String数组转换为ArrayList？
-* 如何反转列表？  
-* HashSet如何存储元素？  
-* 是否可以将null元素添加到TreeSet或HashSet中？
-* 什么是IdentityHashMap和WeakHashMap？
-* 什么时候使用HashMap或TreeMap？
-* 如何使 collection 只读？
-* 如何使 collection 线程安全？  
-* fail-fast 和 fail-safe 之间有什么区别？
-* 什么是 Comparable 和 Comparator 接口？
-* 什么是Collections和Arrays类？
-* 什么是队列和堆栈？ 列出他们的差异？
+### 解释 Collections 层次？  
+### 集和列表之间的区别？  
+### Vector和ArrayList之间的区别？
+### HashMap和HashTable之间的区别？
+### Iterator和ListIterator之间的区别？
+### 为什么Map接口没有扩展Collection接口？
+### 如何将String数组转换为ArrayList？
+### 如何反转列表？  
+### HashSet如何存储元素？  
+### 是否可以将null元素添加到TreeSet或HashSet中？
+### 什么是IdentityHashMap和WeakHashMap？
+### 什么时候使用HashMap或TreeMap？
+### 如何使 collection 只读？
+### 如何使 collection 线程安全？  
+### fail-fast 和 fail-safe 之间有什么区别？
+### 什么是 Comparable 和 Comparator 接口？
+### 什么是Collections和Arrays类？
+### 什么是队列和堆栈？ 列出他们的差异？
 
 ## 1.7 什么是Java中的多态性
 
@@ -207,36 +347,36 @@ HashMap不是线程安全的。
 枚举已成为核心构建块很长时间了，在大多数流行的Java库中都可以看到它们。  
 它帮助你以更加面向对象的方式管理常量。  
 
-* 枚举与枚举类之间的区别？  
-* 枚举可以与String一起使用吗？  
-* 我们可以扩展枚举吗？  
-* 写枚举的语法？  
-* 如何在枚举中实现反向查找？  
-* 什么是EnumMap和EnumSet？  
+### 枚举与枚举类之间的区别？  
+### 枚举可以与String一起使用吗？  
+### 我们可以扩展枚举吗？  
+### 写枚举的语法？  
+### 如何在枚举中实现反向查找？  
+### 什么是EnumMap和EnumSet？  
 
 ## 1.12 Java序列化和 Serializable 接口
 
-* 什么是serialVersionUID？  
-* 什么是readObject和writeObject？  
-* 您将序列化和反序列化一个类吗？  
-* 您将如何对类进行更改，以使序列化不中断？  
-* 我们可以序列化静态字段吗？  
+### 什么是serialVersionUID？  
+### 什么是readObject和writeObject？  
+### 您将序列化和反序列化一个类吗？  
+### 您将如何对类进行更改，以使序列化不中断？  
+### 我们可以序列化静态字段吗？  
 
 ## 1.13. Java Main 方法
 
-* Java main 方法语法？
-* 为什么main方法是 公有的（public）？
-* 为什么main方法是 静态的（static）？
-* 为什么main方法返回值是 void？
-* 当调用main方法时，内部会发生什么？
+### Java main 方法语法？
+### 为什么main方法是 公有的（public）？
+### 为什么main方法是 静态的（static）？
+### 为什么main方法返回值是 void？
+### 当调用main方法时，内部会发生什么？
 
 ## 1.14. Java 对象克隆
 
-* clone（）方法如何工作？
-* Java中的浅拷贝是什么？
-* 什么是复制构造函数？
-* Java中的深拷贝是什么？
-* 创建对象的深拷贝的不同方法？  
+### clone（）方法如何工作？
+### Java中的浅拷贝是什么？
+### 什么是复制构造函数？
+### Java中的深拷贝是什么？
+### 创建对象的深拷贝的不同方法？  
 
 ## 1.15 什么是 CountDownLatch?
 
@@ -293,26 +433,26 @@ java.util.UUID
 
 ## 2.1 什么是线程安全？  
 
-* 线程安全的正确性是什么？  
-* 举个线程安全类的例子吗？  
-* 您将如何设计线程安全的Java类？  
-* 不变类线程安全吗？  
+### 线程安全的正确性是什么？  
+### 举个线程安全类的例子吗？  
+### 您将如何设计线程安全的Java类？  
+### 不变类线程安全吗？  
 
 ## 2.2 对象级锁与类级锁
 
 
 ## 2.3 “implements Runnable” and “extends Thread”的区别？
 
-* Thread and Runnable的区别?  
-* 通过 Runnable interface 创建可以运行线程？
-* 两者之间应首选哪种方法？  
+### Thread and Runnable的区别?  
+### 通过 Runnable interface 创建可以运行线程？
+### 两者之间应首选哪种方法？  
 
 ## 2.4 Compare and Swap [CAS] 算法
 
-* 什么是乐观锁定和悲观锁定？  
-* 什么是CAS算法？  
-* 什么是原子操作？  
-* AtomicInteger和AtomicLong如何工作？  
+### 什么是乐观锁定和悲观锁定？  
+### 什么是CAS算法？  
+### 什么是原子操作？  
+### AtomicInteger和AtomicLong如何工作？  
 
 ## 2.5 Fork / Join框架是什么?
 
@@ -333,101 +473,101 @@ java.util.UUID
 
 ## 4.1 Spring Core 的面试问题  
 
-* 什么是控制反转（IoC）和依赖注入（DI）？
+### 什么是控制反转（IoC）和依赖注入（DI）？
 
-* BeanFactory和ApplicationContext之间的区别？
+### BeanFactory和ApplicationContext之间的区别？
 
-* 什么是基于Spring Java的配置？
+### 什么是基于Spring Java的配置？
 
-* 解释Spring Bean的生命周期？
+### 解释Spring Bean的生命周期？
 
-* Spring Bean范围有哪些不同？
+### Spring Bean范围有哪些不同？
 
-* 在Spring Framework中，Singleton bean线程安全吗？
+### 在Spring Framework中，Singleton bean线程安全吗？
 
-* 解释Bean自动装配的不同模式？
+### 解释Bean自动装配的不同模式？
 
-* 用示例解释@Qualifier注释？
+### 用示例解释@Qualifier注释？
 
-* 构造函数注入和setter注入之间的区别？
+### 构造函数注入和setter注入之间的区别？
 
-* 列举一下Spring框架中使用的一些设计模式吗？
+### 列举一下Spring框架中使用的一些设计模式吗？
 
 ## 4.2. Spring AOP
 
-* 关注点和跨领域关注点之间的区别？
+### 关注点和跨领域关注点之间的区别？
 
-* 有哪些可用的AOP实现？
+### 有哪些可用的AOP实现？
 
-* Spring AOP中 有哪些不同的建议类型？
+### Spring AOP中 有哪些不同的建议类型？
 
-* 什么是Spring AOP代理？
+### 什么是Spring AOP代理？
 
-* 什么是连接点和切点？
+### 什么是连接点和切点？
 
-* 什么是纵横编织？
+### 什么是纵横编织？
 
 ## 4.3. Spring MVC
 
-* 什么是MVC架构？
+### 什么是MVC架构？
 
-* 什么是DispatcherServlet和ContextLoaderListener？
+### 什么是DispatcherServlet和ContextLoaderListener？
 
-* 如何使用基于Java的配置？
+### 如何使用基于Java的配置？
 
-* 我们如何使用Spring创建返回JSON响应的Restful Web Service？
+### 我们如何使用Spring创建返回JSON响应的Restful Web Service？
 
-* <context：annotation-config>与<context：component-scan>之间的区别？
+### <context：annotation-config>与<context：component-scan>之间的区别？
 
-* @Component，@ Controller，@ Repository和@Service批注之间的区别？
+### @Component，@ Controller，@ Repository和@Service批注之间的区别？
 
-* Spring MVC如何提供验证支持？
+### Spring MVC如何提供验证支持？
 
-* 什么是Spring MVC拦截器以及如何使用？
+### 什么是Spring MVC拦截器以及如何使用？
 
-* 如何在Spring MVC Framework中处理异常？
+### 如何在Spring MVC Framework中处理异常？
 
-* 如何在Spring MVC应用程序中实现本地化？
+### 如何在Spring MVC应用程序中实现本地化？
 
 ## 5.1 针对Oracle企业管理项目的Java面试问题  
 
-* 您可以开始讲述自己和您的项目吗？
+### 可以开始讲述自己和项目吗？
 
-* 什么是Java中的抽象和封装？
+### 什么是Java中的抽象和封装？
 
-* 方法重载规则？
+### 方法重载规则？
 
-* Java的扩大和缩小？
+### Java的扩大和缩小？
 
-* 我可以只尝试代码块吗？
+### 我可以只尝试代码块吗？
 
-* 线程：生产者和消费者有问题吗？
+### 线程：生产者和消费者有问题吗？
 
-* 为什么在Object类中定义了wait（），notify（）和notifyAll（）？
+### 为什么在Object类中定义了wait（），notify（）和notifyAll（）？
 
-* 我们可以覆盖wait（）或notify（）方法吗？
+### 我们可以覆盖wait（）或notify（）方法吗？
 
-* wait（），sleep（）和yield（）之间的区别？
+### wait（），sleep（）和yield（）之间的区别？
 
-* 解释一下线程类中的join（）方法？
+### 解释一下线程类中的join（）方法？
 
-* 您是否遇到了内存不足错误？ 如果是，您如何解决？ 告诉不同的情况为什么会这样？
+### 您是否遇到了内存不足错误？ 如果是，您如何解决？ 告诉不同的情况为什么会这样？
 
-* 数据库连接泄漏？
+### 数据库连接泄漏？
 
-* 编写程序以使用第三个变量交换两个数字？
+### 编写程序以使用第三个变量交换两个数字？
 
-* 编写程序对数组进行排序并删除重复项？
+### 编写程序对数组进行排序并删除重复项？
 
-* 在Singleton上编写程序？
+### 在Singleton上编写程序？
 
-* 写一个程序合并两个数组？
+### 写一个程序合并两个数组？
 
-* final和final关键字有什么用？
+### final和final关键字有什么用？
 
-* 我可以将类声明为静态还是私有的吗？
+### 我可以将类声明为静态还是私有的吗？
 
-* 为什么你想要改变公司？
+### 为什么你想要更换公司？
 
 ## 5.2 中级开发人员的Java面试问题  
 
