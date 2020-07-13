@@ -227,29 +227,208 @@ equals()方法，顾名思义，用于验证两个对象的相等性。默认实
 
 ### 为什么要避免使用finalize()方法？  
 
+在回收内存之前，垃圾回收器线程会调用finalize()方法，但并不能保证finalize()一定被执行。   
+
+1. finalize()方法并不像构造函数的机制，父类的构造方法默认被调用，而超级类的finalize()应该显式调用。    
+2. 由 finalize() 方法抛出的任何异常都将被GC线程忽略，并且不会进一步传播，实际上，它不会被记录在日志文件中。  
+3. 类中包含finalize()时，也会影响性能。  
+  Joshua bloch在有效的Java（第2版）中说，在我的机器上，创建和销毁一个简单对象的时间约为5.6 ns。   
+  添加终结器会将时间增加到2,400 ns，换句话说，使用 finalizers 创建和销毁对象要慢430倍。  
+
+注： finalize()方法  
+是一个Object类的方法，也就是说所有类都会继承这个finalize()方法，这个方法默认实现为空。  
+这个方法被用于在对象被回收之前做一些收尾工作，但是被执行是有条件的。  
+
+为什么要避免使用finalize方法？  
+1. 行为不可预测  
+无法预测是否会被执行、无法预测执行是否完整。  
+2. 延迟对象回收  
+使用finalize方法使得对象的回收变得“拖拖拉拉，不够干脆”。  
+3. 可替代  
+大部分情况下，try - finally可以替代finalize方法。  
+
 ### 为什么不应该在多线程环境中使用HashMap？它也会引起无限循环吗？  
 
-### 解释抽象和封装？们有什么关系？  
+HashMap 没有采用同步机制，在多线程环境中存在线程安全问题。  
+HashTable 是线程安全的。  
 
-### 接口和抽象类之间的区别？
+HashMap.get()可能导致无线循环:  
 
-### StringBuffer如何保存内存？
+```java
+# HashMap.get()  源码
+public Object get(Object key) {
+    Object k = maskNull(key);
+    int hash = hash(k);
+    int i = indexFor(hash, table.length);
+    Entry e = table[i];
+    while (true) {
+        if (e == null)
+            return e;
+        if (e.hash == hash &amp;&amp; eq(k, e.key))
+            return e.value;
+        e = e.next;
+    }
+}
+```
 
-### 为什么在对象类而不是线程中声明了wait and notify？  
+while（true）{...}在多线程环境下，e.next可以以某种方式指向自身，这将导致无限循环。  
 
-### 编写Java程序以在Java中创建死锁并修复死锁？  
+可以在void transfer（Entry [] newTable）方法中发生，该方法在HashMap调整大小时调用。  
+```java
+do {
+    Entry next = e.next;
+    int i = indexFor(e.hash, newCapacity);
+    e.next = newTable[i];
+    newTable[i] = e;
+    e = next;
+} while (e != null);
+```
+如果发生了调整大小的情况，同时其他线程试图修改map实例，则这段代码很容易产生上述情况。  
 
-### 如果您的 Serializable 类包含一个不可序列化的成员，该怎么办？如何解决？  
+避免这种情况的唯一方法是在代码中使用同步，更好的方法是使用线程安全的集合数据结构。    
+
+### 解释抽象和封装？有什么关系？  
+
+抽象可以表现为两种方式：  
+1. 数据抽象  
+是一种创建复杂数据类型和只公开有意义的操作与数据类型交互的方法，在这种方法中隐藏所有的实现细节。  
+2. 控件抽象  
+是识别所有此类语句并将其作为工作单元公开的过程。当我们创建一个函数来执行任何工作时，通常会使用此功能。  
+
+将类中的数据和方法与实现隐藏（通过访问控制）结合起来通常称为封装。结果是具有特征和行为的数据类型。  
+封装本质上有信息隐藏和实现隐藏。  
+
+–抽象更多地是关于“类可以做什么”。 [理念]  
+–封装更多地是关于“如何”实现该功能。 [实施]  
+
+### 接口和抽象类之间的区别？  
+
+1. 一个类可以实现许多接口，但是只能有一个父类(抽象或非抽象)  
+2. 接口不是类层次结构的一部分，不相关的类可以实现相同的接口。  
+
+当可以完全描述一个概念，即它可以做什么，而不需要指定它是如何做的，那么应该使用接口。  
+如果需要包含一些实现细节，那么需要在抽象类中实现。  
+
+是否有许多类可以用一个名词组合在一起，如果是这样，用这个名词创建一个抽象类，并继承它。  
+
+什么样的动词可以应用到我的类上，并且通常也可以被其他类使用? 为每个动词创建一个接口。  
+例如，所有的动物都可以喂养，因此我将创建一个名为IFeedable的接口，并让Animal实现它。  
+而只有狗和马可以很好地实现ILikeable，但有些则不行。  
+
+### StringBuffer 如何保存内存？  
+
+字符串被实现为不可变对象，JVM会分配一个与初始值长度相等的固定数组。  
+然后，将其视为JVM内部的常量，在不更改String值的情况下，可以大大节省性能。  
+
+但是如果修改String的内容，那么JVM会把原始String的内容复制到一个临时空间中，进行修改，  
+然后将这些更改保存到一段全新的内存中。  
+因此，在初始化后修改String值是比较昂贵的操作。  
+
+StringBuffer **在JVM内部实现为可动态增长的数组**，这意味着修改操作都可以在现有内存中直接进行，  
+只有在需要时才分配新内存。   
+
+### 为什么在Object类而不是线程中声明了 wait and notify？  
+
+注：  
+1. wait()、notify()和notifyAll()方法是本地方法，并且为final方法，无法被重写。  
+2. 调用某个对象的wait()方法能让当前线程阻塞，并且当前线程必须拥有此对象的monitor（即锁，或者叫管程）  
+3. 调用某个对象的notify()方法能够唤醒一个正在等待这个对象的monitor的线程，  
+如果有多个线程都在等待这个对象的monitor，则只能唤醒其中一个线程。  
+
+why ？  
+1. wait 和 notify 不仅仅是普通方法或同步工具，更重要的是它们是 Java 中两个线程之间的通信机制，  
+同步和等待通知是两个不同的领域，不要把它们看成是相同的或相关的。  
+**同步是提供互斥并确保 Java 类的线程安全，而 wait 和 notify 是两个线程之间的通信机制。**   
+2. 锁是在对象基础上提供的。 
+3. Java 中的线程要进入同步块，需要等待锁，但并不知道哪些线程持有锁，而只是知道锁被某个线程持有，   
+并且他们应该等待取得锁, 而不是去了解哪个线程在同步块内，并请求它们释放锁定。  
+4. Java 是基于 Hoare 的监视器的思想  
+在Java中，所有对象都有一个监视器。  
+线程在监视器上等待，为执行等待，我们需要2个参数：  
+一个线程  
+一个监视器(任何对象)  
+在 Java 设计中，线程不能被指定，它总是运行当前代码的线程。但是，我们可以指定监视器(这是我们称之为等待的对象)。  
+
+### 编写Java程序以在Java中创建死锁并修复死锁？    
+
+* [Java Deadlock Example and Solution](https://howtodoinjava.com/java/multi-threading/writing-a-deadlock-and-resolving-in-java/)  
+
+1. 死锁  
+（1）循环等待  
+（2）非剥夺  
+
+2. 如何避免死锁  
+
+对代码访问共享资源的语句重新排序。  
+强迫其中一个线程释放资源。  
+
+### 如果 Serializable 类包含一个不可序列化的成员，该怎么办？如何解决？   
+
+在这种情况下，NotSerializableException 将在运行时抛出。  
+
+解决方法：  
+1. 非序列化字段设置为 transient；  
+2. 在writeObject（）中，首先在流上调用defaultWriteObject()以存储所有非瞬态字段，  
+然后调用其他方法来序列化不可序列化对象的各个属性。
+3. 在readObject（）中，首先在流上调用defaultReadObject()以读回所有非瞬态字段，  
+然后调用其他方法（对应于添加到writeObject的方法）来反序列化不可序列化的对象。  
+
+参考：  
+[Java Serialization Tutorial](https://howtodoinjava.com/java/serialization/a-mini-guide-for-implementing-serializable-interface-in-java/)  
 
 ### 解释Java中的 transient 和 volatile 关键字？  
 
-### Iterator和ListIterator之间的区别？  
+transient 关键字 用于标识不被序列化的字段。  
+根据语言规范: 变量可以标记为transient，表示它们不是对象持久状态的一部分。  
+例如，可能拥有从其他字段派生的字段，并且只能通过编程来实现，而不是通过序列化来持久化状态。
+
+volatile修饰符告诉JVM，访问该变量的线程必须始终将其变量私有副本与内存中的主副本协调一​​致。   
+这意味着每次线程要读取变量的状态时，它都必须刷新其本地内存状态并更新主内存中变量。  
+
+volatile在无锁算法中最有用。  
+
+volatile应该用于在多线程环境中安全地发布不可变对象。    
+声明一个像 public volatile ImmutableObject foo 这样的字段可以确保所有线程总是看到当前可用的值。  
+
+### Iterator 和 ListIterator 之间的区别？  
+
+可以使用Iterator遍历集合、列表或映射，但是ListIterator只能用于遍历列表。其他差异如下：  
+1. Iterator 在Set和List接口中都有定义，ListIterator仅存在于List接口中（或实现类中）。  
+2. ListIterator有add()方法，可以向List中添加对象，而Iterator不能。  
+3. ListIterator和Iterator都有hasNext()和next()方法，可以实现顺序向后遍历，  
+但是ListIterator有hasPrevious()和previous()方法，可以实现逆向（顺序向前）遍历，而Iterator就不可以。  
+4. ListIterator可以定位当前的索引位置，nextIndex()和previousIndex()可以实现，Iterator没有此功能。  
+5. 都可实现删除对象，但是ListIterator可以实现对象的修改，set()方法可以实现，Iterator 仅能遍历，不能修改。　  　
+
+注：  
+Iterator接口定义了3个方法分别是hasNext()，next()，remove()；  
 
 ## 1.1 核心Java面试问题系列 - 第三部分  
 
+### 深拷贝与浅拷贝  
+
+* 参考 [JAVA 五分钟 - 对象拷贝](http://112.126.103.179/archives/java%E4%BA%94%E5%88%86%E9%92%9F-%E5%AF%B9%E8%B1%A1%E6%8B%B7%E8%B4%9D)  
+
 ### 什么是同步？类级别锁定和对象级别锁定？  
 
+同步与多线程有关，同步代码块同时只能由一个线程执行。  
+同步避免了由于共享内存视图不一致而导致的内存一致性错误。   
+当方法声明为 synchronized 时，该线程持有该方法对象的监视器。  
+如果另一个线程正在执行同步方法，则该线程将被阻塞，直到该线程释放监视器。  
+
+Java中的同步是使用 synchronized 关键字实现的。你可以在类中的方法或代码块上使用 synchronized 关键字。   
+关键字不能与类定义中的变量或属性一起使用。  
+
+对象级锁定 是当希望同步非静态方法或非静态代码块时的一种机制，以便只有一个线程能够在类的给定实例上执行代码块。  
+应该始终这样做，以确保实例级数据线程安全。  
+
+类级别锁定 防止多个线程进入运行时所有可用实例中的同步块。  
+这意味着，如果在运行时有100个DemoClass实例，那么每次只有一个线程能够在任何一个实例中执行demoMethod()，而其他所有实例将为其他线程锁定。  
+为了使静态数据线程安全，应该始终这样做。  
+
 ### sleep()和wait()之间的区别？  
+
+
 
 ### 可以给 this 引用变量赋值null吗？  
 
@@ -261,18 +440,181 @@ this 是一个表示当前实例的特殊关键字，它不是变量。类似地
 
 &是位运算，&&是逻辑运算  
 
-＆评估计算的双方。  
-&&评估计算对象的左侧，如果是，则继续并评估右侧。  
+＆双方都参与计算。  
+&& 先评估计算对象的左侧，如果是，则继续并评估右侧。  
 
-### 如何重写equals和hashCode()方法？  
+### 如何重写equals() 和 hashCode() 方法？    
+
+参考：  
+[Java hashCode() and equals() – Contract, rules and best practices](https://howtodoinjava.com/java/basics/java-hashcode-equals-methods/)  
+> Java hashCode()和equals()的契约、规则和最佳实践   
+
+hashCode()在运行时为对象返回一个惟一的整数值，默认情况下，**hashCode()方法返回存储对象的内存地址的整数表示**。    
+当需要将该对象存储在诸如HashTable 之类的数据结构时，这个整数用于确定bucket位置。   
+
+equals(Object otherObject)，它的默认实现只是检查两个对象的对象引用来验证它们的相等性。  
+默认情况下，当且仅当两个对象存储在相同的内存地址时，它们是相等的。  
+
+* hashCode() and equals() 之间的契约  
+
+每当重写equals()方法时，通常都需要重写hashCode()方法，  
+以便维护hashCode()方法的通用契约，该契约规定equal对象必须具有相等的哈希码。  
+
+1. Java应用程序执行期间多次对同一个对象调用hashCode方法时，如果在对象相等比较中使用的信息没有被修改，该方法就必须返回相同的整数。  
+此整数不需要在应用程序的一次执行与同一应用程序的另一次执行之间保持一致。
+2. 如果根据equals(Object)方法两个对象相等，则在每个对象上调用hashCode方法返回结果必须一致。   
+3. 如果根据equals(Object）方法，得到两个对象不相等，对每个对象上调用hashCode方法的返回值不做要求。  
+但是，应该意识到，为不相等的对象生成不同的整数结果可能会提高哈希表的性能。  
+
+* EqualsBuilder and HashCodeBuilder   
+
+Apache commons提供了两个优秀的实用工具类HashCodeBuilder和EqualsBuilder，用于生成哈希代码和equals方法：  
+
+```java
+// Employee.java
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+public class Employee
+{
+    private Integer id;
+    private String firstname;
+    private String lastName;
+    private String department;
+     
+    //Setters and Getters
+ 
+    @Override
+    public int hashCode()
+    {
+        final int PRIME = 31;
+        return new HashCodeBuilder(getId()%2==0?getId()+1:getId(), PRIME).toHashCode();
+    }
+ 
+    @Override
+    public boolean equals(Object o) {
+    if (o == null)
+       return false;
+        
+    if (o == this)
+       return true;
+        
+    if (o.getClass() != getClass())
+       return false;
+     
+    Employee e = (Employee) o;
+     
+    return new EqualsBuilder().
+              append(getId(), e.getId()).
+              isEquals();
+    }
+}
+```
+
+* Eclipse 创建 hashCode() and equals()   
+
+大多数编辑器也能够为您生成一些良好的结构。 例如，Eclipse IDE可以选择为您生成一个很好的hashCode()和equals()实现。  
+
+![](https://howtodoinjava.com/wp-content/uploads/2018/08/hashcode-and-equals-in-eclipse.png)  
+
+* 重写hashCode()和equals()时的注意点：  
+
+1. 始终使用对象的相同属性来生成hashCode()和equals()两者。 上面我们使用了员工ID。  
+2. equals 必须一致（如果对象未修改，则必须返回相同的值）。  
+3. 每当a.equals(b)时，a.hashCode() 必须与b.hashCode() 相同。
+4. 如果重写了其中一个，则应同时重写另一个。  
+
+* 在ORM中使用时注意点  
+
+1. 如果使用ORM，确保始终使用getter，并且永远不要在hashCode()和equals()中引用字段。  
+因为在ORM中，字段有时是延迟加载的，直到调用其getter方法才可用。  
+例如： 
+在Employee类中，如果使用e1.id == e2.id，id字段很可能是延迟加载的。  
+因此，在这种情况下，一个可能为零或null，从而导致错误的行为。  
+
+但是如果使用e1.getId() == e2.getId()，即使字段是延迟加载，也可以确保首先调用getter填充该字段。  
 
 ### 解释所有访问修饰符？
 
-### 什么是垃圾收集？我们可以执行吗？
-### 什么是原生关键字？  
+* private
 
-### 什么是序列化？解释渔获物？  
+* default
 
+默认访问级别是通过根本不写任何访问修饰符来声明的。  
+默认访问级别意味着 类本身的代码+与该类相同包内的类的代码 可以访问类、字段、构造函数或方法。  
+因此，默认访问修饰符有时也称为包访问修饰符。  
+
+* public
+
+* protected
+
+<table border="1" cellspacing="0"><tbody><tr><td><strong><em>Modifiers</em></strong></td><td><em>Same Class</em></td><td><em>Same Package</em></td><td><em>Subclass</em></td><td><em>Other packages</em></td></tr><tr><td>public</td><td>Y</td><td>Y</td><td>Y</td><td>Y</td></tr><tr><td>protected</td><td>Y</td><td>Y</td><td>Y</td><td>N</td></tr><tr><td>default</td><td>Y</td><td>Y</td><td>N</td><td>N</td></tr><tr><td>private</td><td>Y</td><td>N</td><td>N</td><td>N</td></tr></tbody></table>
+
+### 什么是垃圾收集？可以强制执行吗？  
+
+垃圾收集是许多现代编程语言（比如Java语言和.net框架中的语言）的自动内存管理特性。  
+垃圾收集JVM虚拟机中解释或运行。  
+GC有两个目标：应该释放任何未使用的内存，除非程序不再使用它，否则不应该释放。
+
+调用System.gc()可以向垃圾收集器提示希望它进行收集。  
+因为垃圾收集器是不确定的，所以没有办法强制和立即进行收集。  
+此外，在OutOfMemoryError的文档中声明，除非VM在进行了完整的垃圾收集后无法回收内存，否则不会抛出异常。  
+因此，如果一直分配内存直到内存溢出，将强制执行完整的垃圾收集。
+
+[参考] ：  
+[Java Memory Management – Garbage Collection Algorithms](https://howtodoinjava.com/java/garbage-collection/revisiting-memory-management-and-garbage-collection-mechanisms-in-java/)  
+
+### 什么是native关键字？  
+
+native关键字应用于方法，以指示该方法是使用JNI在native代码中实现的。    
+即它标记一个方法，方法将在其他语言中实现，而不是在Java中。    
+
+过去使用native方法来编写性能关键部分，但随着Java越来越快，这种情况现在不太常见了。  
+现在需要native方法的场景：  
+1. 需要从Java调用用其他语言编写的库。   
+2. 实际上，许多与真实计算机交互的系统函数(例如磁盘和网络IO)只能这样做，因为它们调用了本地代码。  
+
+使用native代码库的缺点也很明显：   
+1. JNI / JNA倾向于破坏JVM的稳定性，尤其是当尝试做一些复杂的事情时。  
+如果native代码错误地执行了native代码内存管理，则很有可能会使JVM崩溃。   
+如果你的native代码是不可重入的，并且从多个Java线程中调用，则坏事……会偶尔发生。 等等。  
+2. 带有native代码的Java比纯Java或纯C / C ++更难调试。
+3. native代码可能为其他平台无关的Java应用程序引入重要的平台依赖性/问题。  
+4. native代码需要一个单独的构建框架，并且也可能存在平台/可移植性问题。  
+
+### 什么是序列化？解释catches？  
+
+在计算机科学中，在数据存储和传输的环境中，序列化是将数据结构或对象状态转换成一种格式的过程，然后可以存储和恢复。  
+当根据序列化格式重新生成位序列时，可以使用它创建语义上相同的原始对象克隆。  
+
+Java提供了自动序列化，该序列化要求通过实现java.io.Serializable接口来标记对象。   
+实现该接口会将类标记为“可以序列化”，然后Java将在内部处理序列化。   
+在可序列化接口上没有定义任何序列化方法，但是可序列化的类可以选择定义带有某些特殊名称和签名的方法，  
+如果定义了这些特殊名称和签名，这些方法将被称为序列化/反序列化过程的一部分。  
+
+对象序列化后，其类中的更改会破坏反序列化过程。   
+要确定 class 中将来将兼容的变化和其他可能不兼容的变化，请在[此处阅读完整的指南](https://howtodoinjava.com/java/serialization/a-mini-guide-for-implementing-serializable-interface-in-java/)。   
+
+* 不兼容的更改  
+
+1. 删除字段  
+2. 将类的层级上移或下移
+3. 将非静态字段更改为静态或将 non-transient 字段更改为transient
+4. 更改原始字段的声明类型
+5. 更改writeObject或readObject方法，使其不再写入或读取默认字段数据
+6. 将类从可序列化更改为可外部化，反之亦然
+7. 将类从非枚举类型更改为枚举类型，反之亦然
+8. 删除可序列化或可外部化的
+9. 将writeReplace或readResolve方法添加到类  
+
+* 兼容的更改   
+
+1. 添加字段  
+2. 添加/移除类
+3. 添加writeObject / readObject方法（首先调用defaultReadObject或defaultWriteObject）
+3. 删除writeObject / readObject方法
+4. 添加java.io.Serializable
+5. 更改对字段的访问
+6. 将一个字段从静态更改为non-static 或从transient 更改为 non transient
 
 ## 1.2 对象初始化的最佳做法
 
@@ -284,16 +626,23 @@ this 是一个表示当前实例的特殊关键字，它不是变量。类似地
 ## 1.3 HashMap 是如何工作的
 
 ### HashMap如何存储键值对？  
+
 ### HashMap如何解决冲突？  
+
 ### HashMap中如何使用hashCode（）和equals（）方法？  
+
 ### key的随机/固定hashCode（）值的影响？  
+
 ### 在多线程环境中使用HashMap？  
 
 ## 1.4 HashMap Key 好的设计
 
 ### 为什么String是HashMap的好钥匙？  
+
 ### 您将如何设计一个用作键的类？    
+
 ### 您将重写Key类中的hashCode（）方法吗？ 有什么影响？  
+
 ### 为可以作为HashMap关键对象的类编写语法？  
 
 ## 1.5 ConcurrentHashMap 相关问题
@@ -305,22 +654,39 @@ HashMap不是线程安全的。
 ## 1.6 Java 集合框架 相关问题  
 
 ### 解释 Collections 层次？  
+
 ### 集和列表之间的区别？  
+
 ### Vector和ArrayList之间的区别？
+
 ### HashMap和HashTable之间的区别？
+
 ### Iterator和ListIterator之间的区别？
+
 ### 为什么Map接口没有扩展Collection接口？
+
 ### 如何将String数组转换为ArrayList？
+
 ### 如何反转列表？  
+
 ### HashSet如何存储元素？  
+
 ### 是否可以将null元素添加到TreeSet或HashSet中？
+
 ### 什么是IdentityHashMap和WeakHashMap？
+
 ### 什么时候使用HashMap或TreeMap？
+
 ### 如何使 collection 只读？
+
 ### 如何使 collection 线程安全？  
+
 ### fail-fast 和 fail-safe 之间有什么区别？
+
 ### 什么是 Comparable 和 Comparator 接口？
+
 ### 什么是Collections和Arrays类？
+
 ### 什么是队列和堆栈？ 列出他们的差异？
 
 ## 1.7 什么是Java中的多态性
@@ -342,40 +708,59 @@ HashMap不是线程安全的。
 
 功能接口完全改变了我们看待Java语言的两个基本构建块的方式。 
 
+
+
 ## 1.11 枚举的相关问题
 
 枚举已成为核心构建块很长时间了，在大多数流行的Java库中都可以看到它们。  
 它帮助你以更加面向对象的方式管理常量。  
 
 ### 枚举与枚举类之间的区别？  
+
 ### 枚举可以与String一起使用吗？  
+
 ### 我们可以扩展枚举吗？  
+
 ### 写枚举的语法？  
+
 ### 如何在枚举中实现反向查找？  
+
 ### 什么是EnumMap和EnumSet？  
 
-## 1.12 Java序列化和 Serializable 接口
+## 1.12 Java序列化和 Serializable 接口  
 
 ### 什么是serialVersionUID？  
+
 ### 什么是readObject和writeObject？  
+
 ### 您将序列化和反序列化一个类吗？  
+
 ### 您将如何对类进行更改，以使序列化不中断？  
+
 ### 我们可以序列化静态字段吗？  
 
 ## 1.13. Java Main 方法
 
-### Java main 方法语法？
-### 为什么main方法是 公有的（public）？
-### 为什么main方法是 静态的（static）？
-### 为什么main方法返回值是 void？
-### 当调用main方法时，内部会发生什么？
+### Java main 方法语法？  
+
+### 为什么main方法是 公有的（public）？  
+
+### 为什么main方法是 静态的（static）？  
+
+### 为什么main方法返回值是 void？  
+
+### 当调用main方法时，内部会发生什么？  
 
 ## 1.14. Java 对象克隆
 
-### clone（）方法如何工作？
-### Java中的浅拷贝是什么？
-### 什么是复制构造函数？
-### Java中的深拷贝是什么？
+### clone（）方法如何工作？  
+
+### Java中的浅拷贝是什么？  
+
+### 什么是复制构造函数？  
+
+### Java中的深拷贝是什么？  
+
 ### 创建对象的深拷贝的不同方法？  
 
 ## 1.15 什么是 CountDownLatch?
@@ -434,8 +819,11 @@ java.util.UUID
 ## 2.1 什么是线程安全？  
 
 ### 线程安全的正确性是什么？  
+
 ### 举个线程安全类的例子吗？  
+
 ### 您将如何设计线程安全的Java类？  
+
 ### 不变类线程安全吗？  
 
 ## 2.2 对象级锁与类级锁
@@ -444,17 +832,23 @@ java.util.UUID
 ## 2.3 “implements Runnable” and “extends Thread”的区别？
 
 ### Thread and Runnable的区别?  
-### 通过 Runnable interface 创建可以运行线程？
+
+### 通过 Runnable interface 创建可以运行线程？  
+
 ### 两者之间应首选哪种方法？  
 
 ## 2.4 Compare and Swap [CAS] 算法
 
 ### 什么是乐观锁定和悲观锁定？  
+
 ### 什么是CAS算法？  
+
 ### 什么是原子操作？  
+
 ### AtomicInteger和AtomicLong如何工作？  
 
-## 2.5 Fork / Join框架是什么?
+
+## 2.5 Fork / Join框架是什么?  
 
 
 ## 2.6 什么是ThreadPoolExecutor？  
@@ -567,13 +961,13 @@ java.util.UUID
 
 ### 我可以将类声明为静态还是私有的吗？
 
-### 为什么你想要更换公司？
+### 为什么你想要更换公司？  
 
 ## 5.2 中级开发人员的Java面试问题  
 
-## 6.1. Java Puzzlers
+## 6.1. Java Puzzlers  
 
-## 6.2. Java Concurrency in Practice
+## 6.2. Java Concurrency in Practice  
 
-## 6.3. Effective Java by Joshua Bloch
+## 6.3. Effective Java by Joshua Bloch  
 
