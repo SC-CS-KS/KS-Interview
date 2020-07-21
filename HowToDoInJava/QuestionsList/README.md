@@ -625,6 +625,8 @@ Java提供了自动序列化，该序列化要求通过实现java.io.Serializabl
 
 ## 1.3 HashMap 是如何工作的
 
+[Java 五分钟 - HashMap](http://112.126.103.179/archives/java-five-minutes-hashmap)  
+ 
 ### HashMap如何存储键值对？  
 
 ### HashMap如何解决冲突？  
@@ -637,21 +639,27 @@ Java提供了自动序列化，该序列化要求通过实现java.io.Serializabl
 
 ## 1.4 HashMap Key 好的设计
 
+[Java 五分钟 - HashMap](http://112.126.103.179/archives/java-five-minutes-hashmap)  
+
 ### 为什么String是HashMap的好钥匙？  
 
-### 您将如何设计一个用作键的类？    
+### 如何设计一个用作键的类？    
 
-### 您将重写Key类中的hashCode（）方法吗？ 有什么影响？  
+### 需要重写Key类中的hashCode()方法吗？ 有什么影响？  
 
 ### 为可以作为HashMap关键对象的类编写语法？  
 
 ## 1.5 ConcurrentHashMap 相关问题
+
+[Java 五分钟 - ConcurrentHashMap](http://112.126.103.179/archives/java-five-minutes-concurrenthashmap)  
 
 HashMap不是线程安全的。  
 可以在并发应用程序中使用HashTable，但是它会影响应用程序性能。  
 所以有ConcurrentHashMap，它是HashMap的并发版本，具有与HashMap相同的性能，同时也是线程安全的。  
 
 ## 1.6 Java 集合框架 相关问题  
+
+[Java 五分钟 - Collections](http://112.126.103.179/archives/java-five-minuters-collection)
 
 ### 解释 Collections 层次？  
 
@@ -689,28 +697,36 @@ HashMap不是线程安全的。
 
 ### 什么是队列和堆栈？ 列出他们的差异？
 
-## 1.7 什么是Java中的多态性
+## 1.7 什么是Java中的多态性  
+
+[Java 五分钟 - OOPs](http://112.126.103.179/archives/java-five-minutes-oops)
 
 简而言之，多态就是我们可以创建在不同程序环境下表现不同的函数或引用变量的能力。  
 与继承，抽象和封装一样，多态是面向对象编程的主要构建块之一。  
 
 ## 1.8 Java中的抽象是什么  
 
+[Java 五分钟 - OOPs](http://112.126.103.179/archives/java-five-minutes-oops)
 
 ## 1.9 抽象 和 封装
+
+[Java 五分钟 - OOPs](http://112.126.103.179/archives/java-five-minutes-oops)
 
 了解抽象和封装之间的区别是深入理解这两个概念的关键，不能孤立地学习两者。  
 
 ## 1.10 接口和抽象类之间的区别？
+
+[Java 五分钟 - Interface & Abstract Class](http://112.126.103.179/archives/java-five-minutes-interface-abstract-class)
 
 自从Java语言诞生以来，就已经清晰地把抽象类和接口相分离。  
 但到了Java 8，发生了很多变化，它的核心概念之一是功能接口。  
 
 功能接口完全改变了我们看待Java语言的两个基本构建块的方式。 
 
-
-
 ## 1.11 枚举的相关问题
+
+[Java 五分钟 - Enum 基础](http://112.126.103.179/archives/java-five-minutes-enum)
+[Java 五分钟 - Enum 扩展知识](http://112.126.103.179/archives/java-five-minutes-enum-extend)
 
 枚举已成为核心构建块很长时间了，在大多数流行的Java库中都可以看到它们。  
 它帮助你以更加面向对象的方式管理常量。  
@@ -729,31 +745,145 @@ HashMap不是线程安全的。
 
 ## 1.12 Java序列化和 Serializable 接口  
 
-### 什么是serialVersionUID？  
+[Java 五分钟 - 序列化](http://112.126.103.179/archives/java-five-minutes-serialization)
 
-### 什么是readObject和writeObject？  
+### 什么是 serialVersionUID？  
 
-### 您将序列化和反序列化一个类吗？  
+### 什么是 readObject 和 writeObject？  
 
-### 您将如何对类进行更改，以使序列化不中断？  
+### 如何序列化和反序列化一个类？  
 
-### 我们可以序列化静态字段吗？  
+### 要保证序列化不被打断，在对类进行更改时需要注意什么？  
+
+### 可以序列化静态字段吗？  
 
 ## 1.13. Java Main 方法
 
 ### Java main 方法语法？  
 
-### 为什么main方法是 公有的（public）？  
+### 为什么main方法是 公有的（public）？    
+
+main方法是public，任何一个想要启动应用程序的对象在任何地方都可以访问它。  
+Java中的所有方法和构造函数都有一些访问修饰符，main()方法也需要一个。  
+
+请注意，如果不公开main()方法，则不会发生编译错误。   
+将出现运行时错误，因为不存在匹配的main()方法。   
+
+```java
+Main.java
+public class Main 
+{
+    void static main(String[] args) 
+    {
+        System.out.println("Hello World !!");
+    }
+}
+```
+```
+// Console
+Error: Main method not found in class Main, please define the main method as:
+   public static void main(String[] args)
+```
+
+请记住，整个语法需要匹配才能执行main()方法。  
 
 ### 为什么main方法是 静态的（static）？  
 
+假设main方法不是静态方法，要调用任何方法，需要它的一个实例。  
+众所周知，Java可以有重载的构造函数，JVM 就没法确定调用哪个 main 方法。  
+
+补充：  
+静态方法和静态数据加载到内存就可以直接调用而不需要像实例方法一样创建实例后才能调用，  
+如果 main 方法是静态的，那么它就会被加载到 JVM 上下文中成为可直接执行的方法。  
+
+* 请注意   
+如果不将main()方法设为静态，将发生运行时错误。  
+
+```java
+Main.java
+public class Main 
+{
+    public void main(String[] args) 
+    {
+        System.out.println("Hello World !!");
+    }
+}
+```
+```
+Error: Main method is not static in class main, please define the main method as:
+   public static void main(String[] args)
+```
+
 ### 为什么main方法返回值是 void？  
+
+为什么返回值为void？ 这样就不会返回一个无用的返回值给JVM。   
+
+应用程序要与调用过程进行通信的唯一一件事是：正常终止或异常终止。   
+使用System.exit(int)已经可以做到这一点。 非零值表示异常终止，否则一切正常。  
+
+### 为什么叫做main？
+
+它已经在C和C++语言中使用了，所以，大多数开发人员已经习惯了这个名字。  
+否则，就没有其他好的理由了。  
 
 ### 当调用main方法时，内部会发生什么？  
 
+Java中main方法的作用是作为程序执行的起点。  
+
+当你运行java.exe，然后有两个Java本机接口(JNI)调用。  
+这些调用会加载真正是JVM的DLL（是的-Java.exe不是JVM）。  
+JNI是我们在虚拟机世界和C，C ++等世界之间架起桥梁时所使用的工具，反之亦然。 如果不使用JNI，就不可能真正使JVM运行。  
+
+基本上，java.exe是一个超级简单的C应用程序，它解析命令行，在JVM中创建一个新的String数组来保存这些参数，  
+解析出你指定为包含main()的类名，使用JNI调用来查找 main() 方法本身，然后调用main() 方法，将新创建的字符串数组作为参数传入。  
+
+编写自己的java.exe版本（源代码随JDK分发）对你来说是完全合法的，并且可以让它执行完全不同的操作。  
+
+### 我们是否总是需要main方法来运行Java程序？  
+
+我相信不是，有不编写主方法的applet。  
+
+注：  
+* main() method native code in java.c    
+
+```c++
+/*
+* Get the application's main class.
+*/
+if (jarfile != 0) {
+mainClassName = GetMainClassName(env, jarfile);
+... ...
+ 
+mainClass = LoadClass(env, classname);
+if(mainClass == NULL) { /* exception occured */
+... ...
+ 
+/* Get the application's main method */
+mainID = (*env)->GetStaticMethodID(env, mainClass, "main", "([Ljava/lang/String;)V");
+... ...
+ 
+{/* Make sure the main method is public */
+jint mods;
+jmethodID mid;
+jobject obj = (*env)->ToReflectedMethod(env, mainClass, mainID, JNI_TRUE);
+... ...
+ 
+/* Build argument array */
+mainArgs = NewPlatformStringArray(env, argv, argc);
+if (mainArgs == NULL) {
+ReportExceptionDescription(env);
+goto leave;
+}
+ 
+/* Invoke main method. */
+(*env)->CallStaticVoidMethod(env, mainClass, mainID, mainArgs);
+```
+
 ## 1.14. Java 对象克隆
 
-### clone（）方法如何工作？  
+[Java 五分钟 - 对象拷贝](http://112.126.103.179/archives/java-five-minutes-object-copy)
+
+### clone()方法如何工作？  
 
 ### Java中的浅拷贝是什么？  
 
@@ -765,6 +895,62 @@ HashMap不是线程安全的。
 
 ## 1.15 什么是 CountDownLatch?
 
+参考：[Java concurrency – CountDownLatch Example](https://howtodoinjava.com/java/multi-threading/when-to-use-countdownlatch-java-concurrency-example-tutorial/)
+
+CountDownLatch是一种同步辅助工具，它允许一个或多个线程等待，直到在其他线程中执行的一组操作完成。  
+例如 应用程序的主线程要等待，直到负责启动框架服务的其他服务线程完成了所有服务的启动。  
+
+CountDownLatch与JDK 1.5一起引入，并与java.util.concurrent包中的其他并发实用程序  
+（如CyclicBarrier，Semaphore，ConcurrentHashMap和BlockingQueue）一起引入。  
+
+CountDownLatch的工作原理是用线程数初始化一个计数器，每当线程完成执行时，计数器的数量就会递减。  
+当count达到0时，意味着所有线程已经完成了它们的执行，等待锁存的线程继续执行。  
+
+![CountDownLatch Concept](https://howtodoinjava.com/wp-content/uploads/CountdownLatch_example.png)
+
+CountDownLatch的伪代码可以这样写:  
+```java
+//Main thread start
+//Create CountDownLatch for N threads
+//Create and start N threads
+//Main thread wait on latch
+//N threads completes there tasks are returns
+//Main thread resume execution
+```
+
+### CountDownLatch 如何工作？  
+
+构造函数：  
+
+```java
+//Constructs a CountDownLatch initialized with the given count.
+public CountDownLatch(int count) {...}
+```
+此计数本质上是闩锁应等待的线程数。   
+此值只能设置一次，并且CountDownLatch不提供其他任何机制来重置此计数。  
+
+CountDownLatch与主线程的第一次交互是等待其他线程。  
+这个主线程必须在启动其他线程之后立即调用 CountDownLatch.await()方法，  
+主线程执行将在await()方法上停止，直到其他线程完成它们的执行。  
+
+其他N个线程必须有闩锁对象的引用，因为它们需要通知CountDownLatch对象它们已经完成了任务。  
+这个通知是通过 CountDownLatch.countdown()方法完成的。  
+每次调用方法都会减少构造函数中设置的初始计数1。  
+因此，当所有N个线程都调用这个方法时，count达到0，主线程被允许在await()方法之后继续执行。  
+
+### CountDownLatch 的应用场景？  
+
+1. 实现最大并行度  
+有时，我们希望同时启动多个线程，以实现最大的并行性。  
+例如，我们想测试一个类是否为单例。  
+如果我们创建一个初始计数为1的CountDownLatch，并让所有线程等待latch，这就很容易做到。  
+对countDown()方法的单个调用将在同一时间恢复所有等待线程的执行。  
+
+2. 等待N个线程完成，然后再开始执行  
+例如，一个应用程序启动类希望在处理用户请求之前确保所有N个外部系统都已启动并运行。  
+
+3. 死锁检测  
+一个非常方便的用例，你可以在每个测试阶段使用N个线程访问具有不同数量线程的共享资源，并尝试创建死锁。  
 
 ## 1.16 为什么字符串是不可变的?  
 
@@ -804,17 +990,17 @@ java.util.UUID
 
 * 使类不可变的好处  
 1. 易于构建，测试和使用  
-2. 自动是线程安全的，并且没有同步问题
-3. 不需要复制构造函数  do not need a copy constructor
-4. 不需要拷贝的实现 do not need an implementation of clone
-5. 允许hashCode*()使用延迟初始化，并缓存其返回值
-6. 用作字段时不需要防御性地拷贝
-7. 作为更好的Map Key 和Set元素（这些对象在集合中时不得更改状态）
-8. 在构造时就建立了其类不变式，因此无需再次检查
-9. 总是具有“失败原子性”（ “failure atomicity”，约书亚·布洛赫（Joshua Bloch）使用的术语）： 
-如果不可变的对象抛出异常，则永远不会处于不希望的状态或不确定的状态。  
+2. 自动是线程安全的，并且没有同步问题  
+3. 不需要复制构造函数  do not need a copy constructor  
+4. 不需要拷贝的实现 do not need an implementation of clone  
+5. 允许hashCode*()使用延迟初始化，并缓存其返回值  
+6. 用作字段时不需要防御性地拷贝  
+7. 作为更好的Map Key 和Set元素（这些对象在集合中时不得更改状态）  
+8. 在构造时就建立了其类不变式，因此无需再次检查  
+9. 总是具有“失败原子性”（ “failure atomicity”，约书亚·布洛赫（Joshua Bloch）使用的术语）：   
+如果不可变的对象抛出异常，则永远不会处于不希望的状态或不确定的状态。   
 
-[参考](https://howtodoinjava.com/java/basics/how-to-make-a-java-class-immutable/)  
+[参考](https://howtodoinjava.com/java/basics/how-to-make-a-java-class-immutable/)    
 
 ## 2.1 什么是线程安全？  
 
@@ -826,8 +1012,7 @@ java.util.UUID
 
 ### 不变类线程安全吗？  
 
-## 2.2 对象级锁与类级锁
-
+## 2.2 对象级锁与类级锁  
 
 ## 2.3 “implements Runnable” and “extends Thread”的区别？
 
