@@ -1004,6 +1004,8 @@ java.util.UUID
 
 ## 2.1 什么是线程安全？  
 
+![Java 五分钟 - 线程安全](http://112.126.103.179/archives/java-five-minutes-thread-safety)  
+
 ### 线程安全的正确性是什么？  
 
 ### 举个线程安全类的例子吗？  
@@ -1015,6 +1017,8 @@ java.util.UUID
 ## 2.2 对象级锁与类级锁  
 
 ## 2.3 “implements Runnable” and “extends Thread”的区别？
+
+![Java 五分钟 - Thread vs Runnable vs Callable vs Future](http://112.126.103.179/archives/java-five-minutes-runnable-thread-callable)  
 
 ### Thread and Runnable的区别?  
 
@@ -1030,11 +1034,9 @@ java.util.UUID
 
 ### 什么是原子操作？  
 
-### AtomicInteger和AtomicLong如何工作？  
-
+### AtomicInteger 和AtomicLong 如何工作？  
 
 ## 2.5 Fork / Join框架是什么?  
-
 
 ## 2.6 什么是ThreadPoolExecutor？  
 
