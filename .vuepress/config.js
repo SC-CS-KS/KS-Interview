@@ -23,13 +23,16 @@ module.exports = {
         collapsable: true, // 可选的, 默认值是 true,
         sidebarDepth: 1,    // 可选的, 默认值是 1
         children: [
-          '/Java/basic/',
+          '/Java/basics/',
+          '/Java/features/',
+          '/Java/design-idea/',
           '/Java/concurrent/',
-          '/Java/Network/',
-          '/Java/DS/',
-          '/Java/JVM/',
-          '/Java/Spring/',
-          '/Java/Netty/',
+          '/Java/network/',
+          '/Java/datastructure/',
+          '/Java/jvm/',
+          '/Java/jmm/',
+          '/Java/spring/',
+          '/Java/netty/',
         ]
       },
       {
