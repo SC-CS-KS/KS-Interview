@@ -1026,7 +1026,7 @@ java.util.UUID
 
 ### 两者之间应首选哪种方法？  
 
-## 2.4 Compare and Swap [CAS] 算法
+## 2.4 Compare and Swap [CAS] 算法  
 
 ### 什么是乐观锁定和悲观锁定？  
 
