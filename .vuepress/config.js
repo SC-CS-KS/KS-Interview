@@ -30,6 +30,7 @@ module.exports = {
           '/Java/network/',
           '/Java/datastructure/',
           '/Java/jvm/',
+          '/Java/gc/',
           '/Java/jmm/',
           '/Java/spring/',
           '/Java/netty/',
